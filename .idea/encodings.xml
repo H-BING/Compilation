@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Lexer.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Main.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Num.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Tag.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Token.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/Word.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/base/Num.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/base/Tag.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/base/Token.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/base/Word.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/lexer/Lexer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/first/src/main/java/com/example/main/Main.java" charset="UTF-8" />
   </component>
 </project>

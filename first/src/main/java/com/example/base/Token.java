@@ -1,4 +1,4 @@
-package com.example;
+package com.example.base;
 
 /**
  * Token 描述所有记号基类

@@ -1,4 +1,4 @@
-package com.example;
+package com.example.base;
 
 public class Real extends Token {
     public final float value;

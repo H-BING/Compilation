@@ -1,4 +1,11 @@
-package com.example;
+package com.example.lexer;
+
+import com.example.base.Num;
+import com.example.base.Real;
+import com.example.base.Tag;
+import com.example.base.Token;
+import com.example.base.Word;
+import com.example.main.Main;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -201,7 +208,7 @@ public class Lexer {
                 float numfloat = Float.valueOf(num.toString());
 
                 oldpeek = peek;
-                Word word = new Word(num.toString(),Tag.REAL);
+                Word word = new Word(num.toString(), Tag.REAL);
                 words.put(num.toString(),word);
                 Real real = new Real(numfloat);
 

@@ -1,4 +1,4 @@
-package com.example;
+package com.example.base;
 
 /**
  * Word 描述保留字、标识符、各种复合运算符
@@ -53,7 +53,7 @@ public class Word extends Token {
         
     //逻辑运算符
     public static final Word[] lopers = new Word[] {
-    	new Word("Not",500),new Word("And",501),new Word("OR",502),new Word("XOR",503)
+            new Word("NOT",500),new Word("AND",501),new Word("OR",502),new Word("XOR",503)
     };
     
     //关系运算符

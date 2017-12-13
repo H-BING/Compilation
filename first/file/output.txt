@@ -74,6 +74,8 @@
 <ARRAY>
 <FOR>
 <MAXINT>
+<NOT>
+<AND>
 <RECORD>
 <>>
 <TYPE>
@@ -95,9 +97,7 @@
 <BOOLEAN>
 </>
 <->
-<Not>
 <TRUE>
-<And>
 <PROGRAM>
 <+>
 <*>

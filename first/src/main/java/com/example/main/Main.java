@@ -1,4 +1,9 @@
-package com.example;
+package com.example.main;
+
+import com.example.lexer.Lexer;
+import com.example.base.Tag;
+import com.example.base.Token;
+import com.example.base.Word;
 
 import java.awt.Button;
 import java.awt.Color;
@@ -15,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -112,17 +116,17 @@ public class Main extends Frame {
 			Word value =(Word)va.next();
 			int key = value.tag;
 
-			if(key == 1000) {
+			if(key == Tag.ID) {
 				builder.append("<ID,"+value.lexeme+">").append("\r").append("\n");
 			}
-			else if( key == 2000) {
+			else if( key == Tag.NUM) {
 				builder.append("<NUM,"+value.lexeme+">").append("\r").append("\n");
 			}
-			else if(key == 3000) {
-				builder.append("<String,"+value.lexeme+">").append("\r").append("\n");
+			else if(key == Tag.STRING) {
+				builder.append("<STRING,"+value.lexeme+">").append("\r").append("\n");
 			}
-			else if(key == 5000) {
-				builder.append("<Real,"+value.lexeme+">").append("\r").append("\n");
+			else if(key == Tag.REAL) {
+				builder.append("<REAL,"+value.lexeme+">").append("\r").append("\n");
 			}
 			else {
 				builder.append("<"+value.lexeme+">").append("\r").append("\n");

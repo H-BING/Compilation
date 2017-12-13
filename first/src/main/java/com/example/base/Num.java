@@ -1,4 +1,4 @@
-package com.example;
+package com.example.base;
 /**
  * Num 描述整数
  * @author DELL
