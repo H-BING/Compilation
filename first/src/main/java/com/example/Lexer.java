@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 public class Lexer {
 
-    public int line = 0;//行号
+    public int line = 1;//行号
     char peek = ' ';//往前看一个字符
     char oldpeek = ' ';
     String input = "";
@@ -62,8 +62,12 @@ public class Lexer {
 
 //        System.out.println(peek + " " + index);
         peek = input.charAt(index++);
-        if (peek == '\n')
+        if (peek == '\n'){
             line++;
+//            System.out.println("emmm");
+//            System.out.println(line);
+//            System.out.println("================");
+        }
     }
 
 //    void readch() throws IOException {
@@ -136,23 +140,31 @@ public class Lexer {
                 readch();
                 if (peek == '=') {
                     return Word.ropers[2];
-                } else if (peek == ' ') {
-                    return Word.ropers[4];
                 } else if (peek == '>') {
                     return Word.ropers[1];
+                } else {
+                    oldpeek = peek;
+                    return Word.ropers[4];
                 }
             case '>':
                 readch();
                 if (peek == '=') {
                     return Word.ropers[3];
-                } else if (peek == ' ') {
+                } else {
+                    oldpeek = peek;
                     return Word.ropers[5];
                 }
             case ':':
-                if (readch('=')) {
+                readch();
+                if (peek == '='){
                     return Word.ropers[6];
+                } else {
+                    oldpeek = peek;
+                    return Word.ropers[7];
                 }
-
+//                if (readch('=')) {
+//                    return Word.ropers[6];
+//                }
         }
 
         /**
@@ -213,7 +225,7 @@ public class Lexer {
             } else {
                 //查看第二个字符
                 c = s.charAt(1);
-                if (c == 'x') { // 16进制
+                if (c == 'x' && s.length() > 2) { // 16进制
                     status = 16;
                 } else if ((c < '8' && c > '0')) { // 8进制
                     status = 8;
@@ -282,7 +294,11 @@ public class Lexer {
             for (int i = 0; i < values.length; i++) {
                 ans = (ans) * status + values[i];
             }
-            if (ans < -1) {
+            if (ans < 0) {
+//                System.out.println(Integer.valueOf(peek));
+                System.out.print(peek);
+                System.out.print(line);
+                System.out.print(line);
                 return Word.error;
             }
 
@@ -294,104 +310,6 @@ public class Lexer {
             return n;
 
         }
-
-        /*if (Character.isDigit(peek)) {
-            int numPoint = 0;
-            int numChar = 0;
-            int status = 2;//初始化数字为2进制
-            StringBuffer num = new StringBuffer();
-            char c;
-            char first = peek;
-
-            while (Character.isLetterOrDigit(peek)) {
-                num.append(peek);
-                readch();
-                if (Character.isLetter(peek)) {
-                    numChar++;
-                    if (peek == '.') {
-                        numPoint++;
-                    }
-                }
-            }
-
-//            do {
-//                num.append(peek);
-//                readch();
-//            } while (Character.isLetterOrDigit(peek));
-
-            String s = "" + num;
-            s = s.toLowerCase();//全部转换为小写
-            int[] values = new int[s.length()];
-
-            if (first != '0') {
-                status = 10;
-            } else {
-                //查看第二个字符
-                c = s.charAt(1);
-                if (c == 'x') { // 16进制
-                    status = 16;
-                } else if ((c < '8' && c > '0')) {
-                    status = 8;
-                } else if (c != '0') {
-                    return Word.error;
-                }
-            }
-
-            if (status == 8) {
-                for (int i = 0; i < s.length(); i++) {
-                    c = s.charAt(i);
-                    if (c > '8') {
-                        return Word.error;
-                    }
-                }
-            } else if (status == 10) {
-                for (int i = 0; i < s.length(); i++) {
-                    c = s.charAt(i);
-                    if (c >= 'a') {
-                        return Word.error;
-                    }
-                }
-            } else {
-
-                for (int i = 0; i < s.length(); i++) {
-                    c = s.charAt(i);
-                    if (c > 'f') {
-                        return Word.error;
-                    }
-                    if (Character.isDigit(c)) {
-                        if (c > '1' && c < '8') {
-                            if (status < 8)
-                                status = 8;
-                        } else if (c >= '8') {
-                            if (status < 10)
-                                status = 10;
-                        }
-                        values[i] = Character.digit(c, 10);
-                    } else {
-                        status = 16;
-                        values[i] = c - 'a' + 10;
-                    }
-                }
-            }
-
-    		*//*转换成10进制输出*//*
-            int v = 0, m = 1;
-//    		System.out.println(status+" "+s.length());
-            for (int i = s.length() - 1; i >= 0; i--) {
-                v = v + m * values[i];
-                m *= status;
-            }
-            if (v == -1) {
-                return Word.error;
-            }
-//            return new Num(v);
-            Word word = new Word(s,Tag.NUM);
-            words.put(s,word);
-            Num n = new Num(v);
-
-            return n;
-
-        }*/
 
 
         /**

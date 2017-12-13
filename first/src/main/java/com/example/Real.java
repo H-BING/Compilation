@@ -7,7 +7,8 @@ public class Real extends Token {
     	super(Tag.REAL); 
     	value = v; 
     }
-    
+
+    @Override
     public String toString() { 
     	return "" + value; 
     }

@@ -12,7 +12,8 @@ public class Word extends Token {
     	super(tag); 
     	lexeme = s;
     }
-    
+
+    @Override
     public String toString(){
     	return lexeme;
     }
@@ -59,7 +60,7 @@ public class Word extends Token {
     public static final Word[] ropers = new Word[] {
     	new Word("=",600),new Word("<>",601),new Word("<=",602),
     	new Word(">=",603),new Word("<",604),new Word(">",605),
-    	new Word(":=",606)
+    	new Word(":=",606), new Word(":", 607)
     };
     
     //标准函数暂时不写
