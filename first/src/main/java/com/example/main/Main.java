@@ -67,7 +67,7 @@ public class Main extends Frame {
 					builder.append(input).append("\n");
 				}
 			} else {
-				System.out.println("找不到制定文件！");
+				System.out.println("鎵句笉鍒板埗瀹氭枃浠讹紒");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,10 +76,6 @@ public class Main extends Frame {
 	}
 
 	public static void outputToFile() throws IOException {
-
-//		System.out.println("=============");
-//		System.out.print(getInputFromText());
-//		System.out.println("=============");
 
 		File file = new File(FILE_OUTPUT);
 		OutputStream outputStream = new FileOutputStream(file);
@@ -153,7 +149,7 @@ public class Main extends Frame {
     	}
     }
     	/**
-    	 * 输出词法分析结果
+    	 * 杈撳嚭璇嶆硶鍒嗘瀽缁撴灉
     	 */
     public static void output() {
     	for(int i = 0; i < length; i++) {
@@ -231,25 +227,25 @@ public class Main extends Frame {
 	public void lanchar(){
 
 		this.setBounds(x, y, width, height);
-		this.setTitle("PASCAL编译器");
+		this.setTitle("PASCAL缂栬瘧鍣�");
 		this.setBackground(Color.white);
 		this.setResizable(false);
 		this.setLayout(null);
 
 
-		//在窗体事件源上添加带有处理事件的监听器。
+		//鍦ㄧ獥浣撲簨浠舵簮涓婃坊鍔犲甫鏈夊鐞嗕簨浠剁殑鐩戝惉鍣ㄣ��
 		this.addWindowListener(new WindowAdapter(){
 
 			public void windowClosing(WindowEvent e){
-				System.exit(0);//关闭窗口处理关闭动作监听事件
+				System.exit(0);//鍏抽棴绐楀彛澶勭悊鍏抽棴鍔ㄤ綔鐩戝惉浜嬩欢
 			}
 		});
 
 
 		/**
-		 * 添加按钮监听
+		 * 娣诲姞鎸夐挳鐩戝惉
 		 */
-		Button b=new Button("编译");//在窗口中添加一个按钮；
+		Button b=new Button("缂栬瘧");//鍦ㄧ獥鍙ｄ腑娣诲姞涓�涓寜閽紱
 		b.setBounds(30, 30, 40, 20);
 		b.addActionListener(new ActionListener() {
 
@@ -259,7 +255,7 @@ public class Main extends Frame {
 				output();
 			}
 		});
-		this.add(b);//将按钮添加到窗口内
+		this.add(b);//灏嗘寜閽坊鍔犲埌绐楀彛鍐�
 
 		this.setVisible(true);
 
