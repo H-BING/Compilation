@@ -20,7 +20,7 @@ public class Word extends Token {
     
     //报错
     public static final Word error = new Word("ERROR", 0);
-    
+
     //保留字 
     public static final Word[] keys = new Word[] {
     	new Word("ARRAY",101),new Word("BEGIN",102),new Word("CASE",103),
