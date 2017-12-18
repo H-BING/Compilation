@@ -12,10 +12,11 @@ import java.io.InputStreamReader;
 
 public class FileHelper {
 
-    public static String FILE_INPUT = "first\\file\\test2.txt";
-    public static String FILE_OUTPUT = "first\\file\\output.txt";
+//    public static String FILE_INPUT = "file\\test2.txt";
+    public static String FILE_INPUT = "first/file/test2.txt";
+    public static String FILE_OUTPUT = "first/file/output.txt";
 
-    public static String getInputFromText(String filePath) {
+    /*public static String getInputFromText(String filePath) {
         StringBuilder builder = new StringBuilder("");
         try {
             String encoding = "GBK";
@@ -28,13 +29,13 @@ public class FileHelper {
                     builder.append(input).append("\n");
                 }
             } else {
-                System.out.println("找不到制定文件！");
+                System.out.println("找不到指定文件！");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return builder.toString();
-    }
+    }*/
 
     public static String[] getInputFromText() {
         StringBuilder builder = new StringBuilder("");
