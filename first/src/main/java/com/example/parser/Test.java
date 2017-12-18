@@ -85,18 +85,18 @@ public class Test {
 			//下一个输入符号
 			String B = closure.next[i];
 			//规约项目,将该文法Follows所有
-//			if(B == null) {
-//				int a = closure.result[i][0];//第几条文法
-//				String[] follows = Grammer.getFollows(a);
-//				for(int j = 0; j < follows.length; j++) {
-//					Goto back1 = new Goto(id,follows[j]);
-//				    back.put(back1, a);
-//				}
-//				
-//			}
+			if(B == null) {
+				int a = closure.result[i][0];//第几条文法
+				String[] follows = Grammer.getFollows(a);
+				for(int j = 0; j < follows.length; j++) {
+					Goto back1 = new Goto(id,follows[j]);
+				    back.put(back1, a);
+				}
+				
+			}
 
 			//B非空，为待约项目
-			if(B != null ) {
+			else {
 				Goto goto1 = new Goto(id,B);
 				if(go.get(goto1) == null) {
 				    //得到下一个项目集合初始文法
@@ -180,8 +180,9 @@ public class Test {
 		
 		int status = 0;//初始状态S0
 		stack.push(status);
+//		String peek = input[0];
 		
-		for(int i = 0; i < input.length; i++) {
+		for(int i = 0; i < input.length;) {
 			
 			Goto temp = new Goto(status,input[i]);
 			//判断对当前输入
@@ -194,24 +195,27 @@ public class Test {
 					//移入
 					status = go.get(temp);
 					stack.push(status);
-					
+					i++;
+					System.out.println("Action:移入!");
 				}
 			}
 			else {
 				if(go.get(temp) == null) {
 					//规约
 					if(go.get(temp) ==0 ) {
-						
 						break;//ACC
 					}
-					else {
-						stack.pop();
-					}
+					int num = go.get(temp);
+					input[i] = Grammer.nonTerminal[Grammer.getLeft(num)];
+					stack.pop();
+					System.out.println("Action:按照第"+num+"条文法规约!");
 				}
 				else {
-					
+					//二义
 				}
 			}
+			
+//			System.o
 		}
 	}
 	
@@ -279,6 +283,7 @@ public class Test {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
+		test.parser();
 		
 //		test.printGo();
 		
