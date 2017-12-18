@@ -8,6 +8,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
+
+import com.example.unit.FileHelper;
 
 public class Test {
     
@@ -27,19 +30,11 @@ public class Test {
 		for(int i = 0; i < num; i++) {
 			extendClosure(C[i],i);
 		}
-		
-		getBack();
+
 //		print();
 		
 	}
-
-	private void getBack() {
-		// TODO Auto-generated method stub
-		
-//		for(int i = 0; i < num; i++) {
-//			
-//		}
-	}
+	
 
 	private void print() {
 		// TODO Auto-generated method stub
@@ -89,7 +84,16 @@ public class Test {
 			
 			//下一个输入符号
 			String B = closure.next[i];
-			
+			//规约项目,将该文法Follows所有
+//			if(B == null) {
+//				int a = closure.result[i][0];//第几条文法
+//				String[] follows = Grammer.getFollows(a);
+//				for(int j = 0; j < follows.length; j++) {
+//					Goto back1 = new Goto(id,follows[j]);
+//				    back.put(back1, a);
+//				}
+//				
+//			}
 
 			//B非空，为待约项目
 			if(B != null ) {
@@ -166,6 +170,51 @@ public class Test {
 		
 	}
 
+	
+	/**
+	 * 处理输入，判断对当前输入字符串采取动作
+	 */
+	public void parser() {
+		Stack<Integer> stack = new Stack<Integer>();
+		String[] input = FileHelper.getInputFromText();
+		
+		int status = 0;//初始状态S0
+		stack.push(status);
+		
+		for(int i = 0; i < input.length; i++) {
+			
+			Goto temp = new Goto(status,input[i]);
+			//判断对当前输入
+			if(back.get(temp) == null) {
+				if(go.get(temp) == null) {
+//					putError();
+					
+				}
+				else {
+					//移入
+					status = go.get(temp);
+					stack.push(status);
+					
+				}
+			}
+			else {
+				if(go.get(temp) == null) {
+					//规约
+					if(go.get(temp) ==0 ) {
+						
+						break;//ACC
+					}
+					else {
+						stack.pop();
+					}
+				}
+				else {
+					
+				}
+			}
+		}
+	}
+	
 //	public boolean isExistClosure(Closure temp) {
 ////		System.out.println("!");
 //		
@@ -231,7 +280,7 @@ public class Test {
 		Test test = new Test();
 		test.items();
 		
-		test.printGo();
+//		test.printGo();
 		
 		
 //		// TODO Auto-generated method stub
