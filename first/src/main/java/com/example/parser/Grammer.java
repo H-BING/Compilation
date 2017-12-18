@@ -10,6 +10,8 @@ public class Grammer {
 			"if_stmt","for_stmt","bool","expr","factor"
 	};
 	
+	
+	
 	//表达式右部
 	static String[] grammer = new String[] {
 			"S",

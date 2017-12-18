@@ -10,16 +10,30 @@ public class Test {
 	Closure[] C = new Closure[5500];
 	int num = 0;//C集合个数
 	Map<Goto,Integer> go = new HashMap<Goto,Integer>();
+	Map<Goto,Integer> back = new HashMap<Goto,Integer>();//规约表
 	
+	/**
+	 * 构建项目集合与goto表
+	 */
 	public void items() {
-		init();
+		init();//初始化S0
 		
+		//拓展
 		for(int i = 0; i < num; i++) {
 			extendClosure(C[i],i);
 		}
 		
-		print();
+		getBack();
+//		print();
 		
+	}
+
+	private void getBack() {
+		// TODO Auto-generated method stub
+		
+//		for(int i = 0; i < num; i++) {
+//			
+//		}
 	}
 
 	private void print() {
@@ -185,13 +199,13 @@ public class Test {
 			System.out.println(go.Cid+" "+go.B+" "+next);
 		}
 	}
-		 
+	
 	public static void main(String[] args) {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
 		
-//		test.printGo();
+		test.printGo();
 		
 		
 //		// TODO Auto-generated method stub

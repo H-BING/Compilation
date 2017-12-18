@@ -1,11 +1,5 @@
 package com.example.main;
 
-import com.example.lexer.Lexer;
-import com.example.base.Tag;
-import com.example.base.Token;
-import com.example.base.Word;
-import com.example.unit.FileHelper;
-
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Frame;
@@ -24,6 +18,12 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import com.example.base.Tag;
+import com.example.base.Token;
+import com.example.base.Word;
+import com.example.lexer.Lexer;
+import com.example.unit.FileHelper;
 
 public class Main extends Frame {
 	
