@@ -79,7 +79,7 @@ public class getSLR1 {
     public static void main(String[] args) {
         initData();
         SLR1();
-        print(COUNT);
+//        print(COUNT);
     }
 
     public static void SLR1(){
@@ -167,10 +167,6 @@ public class getSLR1 {
 
                             len[tempCount]++;
 
-
-//                            int tempTempCount = tempMap.get(next);
-//                            status[i][j] = tempTempCount;
-//                            tempRules.add(new Pair<>(new Pair<>(tempTempCount, j), temp));
                         } else {
                             tempMap.put(next, conut);
                             result[conut][len[conut]] = temp;
@@ -179,21 +175,28 @@ public class getSLR1 {
 
                             len[conut]++;
                             conut++;
+                        }
 
+//                        if (tempMap.containsKey(next)) { // 相同后继符号应转入相同状态
+//                            int tempTempCount = tempMap.get(next);
+//                            status[i][j] = tempTempCount;
+//                            tempRules.add(new Pair<>(new Pair<>(tempTempCount, j), temp));
+//                        } else {
+//
 //                            tempMap.put(next, tempCount);
 //                            tempRules.add(new Pair<>(new Pair<>(tempCount, j), temp));
 //                            status[i][j] = tempCount;
 //
 //                            tempCount++;
-                        }
+//                        }
                     } else { // 当前文法可规约
                         status[i][j] = END;
                     }
                 }
 
                 // 调整后继状态
-//                if (i == 15)
-//                    adjustFollowState(tempRules, i);
+                if (i == 15)
+                    adjustFollowState(tempRules, i);
 
 
 //                conut = tempCount;
