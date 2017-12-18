@@ -46,9 +46,9 @@ public class FileHelper {
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 String input = "";
                 while ((input = bufferedReader.readLine()) != null) {
-
                     builder.append(input.trim()).append(" ");
                 }
+                builder.append("$");
             } else {
                 System.out.println("找不到指定文件！");
             }

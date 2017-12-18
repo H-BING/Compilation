@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
+import com.example.tool.ExcelHelper;
 import com.example.tool.FileHelper;
 
 public class Test {
@@ -269,10 +270,70 @@ public class Test {
 			}
 		});
 
-		for (int i = 0; i < tableGoto.size(); i++) {
-			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
-					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+//		for (int i = 0; i < tableGoto.size(); i++) {
+//			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+//					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+//		}
+
+		ExcelHelper.saveToExcel(tableGoto);
+	}
+
+	public void ExportExcel() {
+		ArrayList<Pair<Pair<Integer, String>, Integer>> tableGoto = new ArrayList<>();
+		ArrayList<Pair<Pair<Integer, String>, Integer>> tableReduce = new ArrayList<>();
+
+		Iterator itGo = go.entrySet().iterator();
+		Iterator itBack = back.entrySet().iterator();
+		while (itGo.hasNext()) {
+			Map.Entry entry = (Map.Entry) itGo.next();
+			Goto go = new Goto();
+			go = (Goto) entry.getKey();
+			Integer next = (Integer) entry.getValue();
+//			System.out.println(go.Cid+" "+go.B+" "+next);
+
+			Integer state = Integer.valueOf(go.Cid);
+			tableGoto.add(new Pair<>(new Pair<>(state, go.B), next));
 		}
+
+		Collections.sort(tableGoto, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
+			@Override
+			public int compare(Pair<Pair<Integer, String>, Integer> p1, Pair<Pair<Integer, String>, Integer> p2) {
+				if (p1.getFirst().getFirst() < p2.getFirst().getFirst()) {
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		});
+
+//		for (int i = 0; i < tableGoto.size(); i++) {
+//			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+//					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+//		}
+
+		/*while (itBack.hasNext()) {
+			Map.Entry entry = (Map.Entry) itBack.next();
+			Goto go = new Goto();
+			go = (Goto) entry.getKey();
+			Integer next = (Integer) entry.getValue();
+//			System.out.println(go.Cid+" "+go.B+" "+next);
+
+			Integer state = Integer.valueOf(go.Cid);
+			tableReduce.add(new Pair<>(new Pair<>(state, go.B), next));
+		}
+
+		Collections.sort(tableReduce, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
+			@Override
+			public int compare(Pair<Pair<Integer, String>, Integer> p1, Pair<Pair<Integer, String>, Integer> p2) {
+				if (p1.getFirst().getFirst() < p2.getFirst().getFirst()) {
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		});*/
+
+		ExcelHelper.saveToExcel(tableGoto);
 	}
 	
 	public static void main(String[] args) {
@@ -281,7 +342,7 @@ public class Test {
 		test.items();
 		
 //		test.printGo();
-		
+		test.ExportExcel();
 		
 //		// TODO Auto-generated method stub
 //		for(int i = 0; i < 26; i++) {
