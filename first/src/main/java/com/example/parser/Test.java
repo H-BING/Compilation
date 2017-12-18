@@ -1,5 +1,10 @@
 package com.example.parser;
 
+import com.example.base.Pair;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -239,13 +244,34 @@ public class Test {
 //	}
 	
 	public void printGo() {
+		ArrayList<Pair<Pair<Integer, String>, Integer>> tableGoto = new ArrayList<>();
+
 		Iterator iter = go.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 			Goto go = new Goto();
 			go = (Goto) entry.getKey();
-			int next = (int) entry.getValue();
-			System.out.println(go.Cid+" "+go.B+" "+next);
+			Integer next = (Integer) entry.getValue();
+//			System.out.println(go.Cid+" "+go.B+" "+next);
+
+			Integer state = Integer.valueOf(go.Cid);
+			tableGoto.add(new Pair<>(new Pair<>(state, go.B), next));
+		}
+
+		Collections.sort(tableGoto, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
+			@Override
+			public int compare(Pair<Pair<Integer, String>, Integer> p1, Pair<Pair<Integer, String>, Integer> p2) {
+				if (p1.getFirst().getFirst() < p2.getFirst().getFirst()) {
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		});
+
+		for (int i = 0; i < tableGoto.size(); i++) {
+			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
 		}
 	}
 	
