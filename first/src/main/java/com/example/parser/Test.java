@@ -31,7 +31,7 @@ public class Test {
 			extendClosure(C[i],i);
 		}
 
-//		print();
+		print();
 		
 	}
 	
@@ -180,72 +180,48 @@ public class Test {
 		
 		int status = 0;//初始状态S0
 		stack.push(status);
-//		String peek = input[0];
+		String peek = input[0];
+		
 		
 		for(int i = 0; i < input.length;) {
-			
-			Goto temp = new Goto(status,input[i]);
+//			System.out.println(status+" "+input[i]+" "+peek);
+			Goto temp = new Goto(status,peek);
 			//判断对当前输入
 			if(back.get(temp) == null) {
 				if(go.get(temp) == null) {
-//					putError();
-					
+//					putError();	
 				}
 				else {
 					//移入
 					status = go.get(temp);
 					stack.push(status);
 					i++;
-					System.out.println("Action:移入!");
+					peek = input[i];
+					System.out.println(status+"Action:移入"+peek);
 				}
 			}
 			else {
 				if(go.get(temp) == null) {
 					//规约
-					if(go.get(temp) ==0 ) {
+					if(back.get(temp) ==0 ) {
 						break;//ACC
 					}
-					int num = go.get(temp);
-					input[i] = Grammer.nonTerminal[Grammer.getLeft(num)];
+					int num = back.get(temp);
+					peek = Grammer.nonTerminal[Grammer.getLeft(num)];
+//					System.out.println(status);
 					stack.pop();
-					System.out.println("Action:按照第"+num+"条文法规约!");
+					status = stack.pop();
+					stack.push(status);
+//					System.out.println(status);
+					System.out.println(status+"Action:按照第"+num+"条文法规约为"+peek);
 				}
 				else {
 					//二义
 				}
 			}
 			
-//			System.o
 		}
 	}
-	
-//	public boolean isExistClosure(Closure temp) {
-////		System.out.println("!");
-//		
-//		for(int j = 0; j < 30;j++) {
-//			for(int k = 0; k < 10; k++) {
-//				System.out.print(temp.rem[j][k]+" ");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println();
-//		boolean exist = true;
-//		for(int i = 0; i < num; i++) {
-//			exist = true;
-//			for(int j = 0;j < temp.number; j++) {
-//				int number = temp.result[j][0];
-//				int position = temp.result[j][1];
-//				if(C[i].rem[number][position] == 0) {
-//					exist = false;
-//					break;
-//				}
-//			}
-//			
-//		}
-//		if(exist == true)System.out.println("!!!!!!!!!!!!!");
-//		return exist;
-//		
-//	}
 	
 	public void printGo() {
 		ArrayList<Pair<Pair<Integer, String>, Integer>> tableGoto = new ArrayList<>();
@@ -279,11 +255,44 @@ public class Test {
 		}
 	}
 	
+	public void printBack() {
+		ArrayList<Pair<Pair<Integer, String>, Integer>> tableGoto = new ArrayList<>();
+
+		Iterator iter = back.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			Goto go = new Goto();
+			go = (Goto) entry.getKey();
+			Integer next = (Integer) entry.getValue();
+//			System.out.println(go.Cid+" "+go.B+" "+next);
+
+			Integer state = Integer.valueOf(go.Cid);
+			tableGoto.add(new Pair<>(new Pair<>(state, go.B), next));
+		}
+
+		Collections.sort(tableGoto, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
+			@Override
+			public int compare(Pair<Pair<Integer, String>, Integer> p1, Pair<Pair<Integer, String>, Integer> p2) {
+				if (p1.getFirst().getFirst() < p2.getFirst().getFirst()) {
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		});
+
+		for (int i = 0; i < tableGoto.size(); i++) {
+			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+		}
+	}
+	
 	public static void main(String[] args) {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
-		test.parser();
+		test.printBack();
+//		test.parser();
 		
 //		test.printGo();
 		
