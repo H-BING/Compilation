@@ -1,5 +1,7 @@
 package com.example.parser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Grammer {
@@ -9,8 +11,6 @@ public class Grammer {
 			"S'","S","compound_stmt","stmts","stmt",
 			"if_stmt","for_stmt","bool","expr","factor"
 	};
-	
-	
 	
 	//表达式右部
 	static String[] grammer = new String[] {
@@ -26,6 +26,56 @@ public class Grammer {
 			"id","num","( expr )"
 			
 	};
+
+	static String[][] follow = new String[][] {
+			{"$"}, /* s' */
+			{"$"}, /* s */
+			{"."}, /* compound_stmt */
+			{"end", ";"}, /* stmts */
+			{"end", ";", "else"}, /* stmt */
+			{"end", ";", "else"}, /* if_stmt */
+			{"end", ";", "else"}, /* for_stmt */
+			{"do", "then"}, /* bool */
+			{"end", ";", "else",
+					"to", "do", "downto",
+					">", "<", "do", "then",
+					"+", "-", "*", "/", "^",
+					")"}, /* expr */
+			{"end", ";", "else",
+					"to", "do", "downto",
+					">", "<", "do", "then",
+					"+", "-", "*", "/", "^",
+					")"}, /* factor */
+	};
+
+	//获得第i条文法的左部
+	public static int getLeft(int i) {
+		if (i < 1) {
+			return 0;
+		} else if (i < 2) {
+			return 1;
+		} else if (i < 3) {
+			return 2;
+		} else if (i < 5) {
+			return 3;
+		} else if (i < 11) {
+			return 4;
+		} else if (i < 13) {
+			return 5;
+		} else if (i < 15) {
+			return 6;
+		} else if (i < 17) {
+			return 7;
+		} else if (i < 23) {
+			return 8;
+		} else {
+			return 9;
+		}
+	}
+
+	public static String[] getFollows(int i) {
+		return follow[getLeft(i)];
+	}
 	
 	//frules与lrules分别是非终结符号第一条与最后一条表达式编号
 	static HashMap<String,Integer> frules = new HashMap<String,Integer>();
