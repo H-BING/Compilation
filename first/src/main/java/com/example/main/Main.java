@@ -4,6 +4,7 @@ import com.example.lexer.Lexer;
 import com.example.base.Tag;
 import com.example.base.Token;
 import com.example.base.Word;
+import com.example.unit.FileHelper;
 
 import java.awt.Button;
 import java.awt.Color;
@@ -51,6 +52,10 @@ public class Main extends Frame {
 		write();
 //		output();
 		outputToFile();
+		String[] str = FileHelper.getInputFromText();
+		for (int i = 0; i < str.length; i++) {
+			System.out.println(str[i]);
+		}
 //		System.out.println(getInputFromText());
     }
 
@@ -67,7 +72,7 @@ public class Main extends Frame {
 					builder.append(input).append("\n");
 				}
 			} else {
-				System.out.println("鎵句笉鍒板埗瀹氭枃浠讹紒");
+				System.out.println("找不到指定文件！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
