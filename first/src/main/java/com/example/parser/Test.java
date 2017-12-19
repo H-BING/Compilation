@@ -33,7 +33,7 @@ public class Test {
 			extendClosure(C[i],i);
 		}
 
-//		print();
+		print();
 		
 	}
 	
@@ -288,7 +288,7 @@ public class Test {
 
 	public void ExportExcel() {
 		ArrayList<Pair<Pair<Integer, String>, Integer>> tableGoto = new ArrayList<>();
-		ArrayList<Pair<Pair<Integer, String>, Integer>> tableReduce = new ArrayList<>();
+		ArrayList<Pair<Pair<Integer, String>, Integer>> tableBack = new ArrayList<>();
 
 		Iterator itGo = go.entrySet().iterator();
 		Iterator itBack = back.entrySet().iterator();
@@ -319,7 +319,7 @@ public class Test {
 //					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
 //		}
 
-		/*while (itBack.hasNext()) {
+		while (itBack.hasNext()) {
 			Map.Entry entry = (Map.Entry) itBack.next();
 			Goto go = new Goto();
 			go = (Goto) entry.getKey();
@@ -327,10 +327,10 @@ public class Test {
 //			System.out.println(go.Cid+" "+go.B+" "+next);
 
 			Integer state = Integer.valueOf(go.Cid);
-			tableReduce.add(new Pair<>(new Pair<>(state, go.B), next));
+			tableBack.add(new Pair<>(new Pair<>(state, go.B), next));
 		}
 
-		Collections.sort(tableReduce, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
+		Collections.sort(tableBack, new Comparator<Pair<Pair<Integer, String>, Integer>>() {
 			@Override
 			public int compare(Pair<Pair<Integer, String>, Integer> p1, Pair<Pair<Integer, String>, Integer> p2) {
 				if (p1.getFirst().getFirst() < p2.getFirst().getFirst()) {
@@ -339,9 +339,14 @@ public class Test {
 					return 1;
 				}
 			}
-		});*/
+		});
 
-		ExcelHelper.saveToExcel(tableGoto);
+//		for (int i = 0; i < tableBack.size(); i++) {
+//			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+//					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+//		}
+
+		ExcelHelper.saveToExcel(tableGoto, tableBack);
 	}
 	
 	public void printBack() {
@@ -387,7 +392,6 @@ public class Test {
 		
 //		test.ExportExcel();
 		
-//		// TODO Auto-generated method stub
 //		for(int i = 0; i < 26; i++) {
 ////     	    String next = Grammer.getNext(i, 2);
 //			begin[0][0] = i;

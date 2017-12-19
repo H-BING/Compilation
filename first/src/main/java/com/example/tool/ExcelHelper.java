@@ -32,7 +32,8 @@ public class ExcelHelper {
         System.out.println(file.getAbsolutePath());
     }
 
-    public static void saveToExcel(ArrayList<Pair<Pair<Integer, String>, Integer>> table) {
+    public static void saveToExcel(ArrayList<Pair<Pair<Integer, String>, Integer>> table,
+                                   ArrayList<Pair<Pair<Integer, String>, Integer>> back) {
         init();
         try {
             File file = saveExcel();
@@ -67,6 +68,30 @@ public class ExcelHelper {
 
                     if (column < 30)
                         go = "S" + go;
+                    ws.addCell(new Label(column, now + 1, go));
+                }
+            }
+
+            for (int i = 0; i < back.size(); i++) {
+                int now = back.get(i).getFirst().getFirst();
+                String next = back.get(i).getFirst().getSecond();
+                String go = back.get(i).getSecond().toString();
+
+                ws.addCell(new Label(0, now + 1, now + ""));
+                if (map.containsKey(next)) {
+                    int column = map.get(next);
+
+                    go = "r" + go;
+
+                    String content = ws.getCell(column, now + 1).getContents();
+                    if (content != null && content.length() > 0) {
+                        System.out.println(now + " " + next + " " + go);
+                        go = content + " | " + go;
+//                        continue;
+                    }
+
+//                    if (column < 30)
+//                        go = "r" + go;
                     ws.addCell(new Label(column, now + 1, go));
                 }
             }
