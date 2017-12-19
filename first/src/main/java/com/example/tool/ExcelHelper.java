@@ -1,6 +1,9 @@
 package com.example.tool;
 
 import com.example.base.Pair;
+import com.example.parser.Closure;
+import com.example.parser.Goto;
+import com.example.parser.Grammer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,21 +25,23 @@ import jxl.write.WritableWorkbook;
  */
 
 public class ExcelHelper {
-    public static String FILENAME = "SLR(merge).xls";
+    public static String FILE_SLR = "SLR(merge).xls";
+    public static String FILE_CLOSURE = "LR(0).xls";
+    public static String FILE_ANALYSIS = "analysis.xls";
     public static HashMap<String, Integer> map = new HashMap<>();
     public static HashMap<Integer, String> map2 = new HashMap<>();
     public static int i = 0, k = 30;
 
     public static void main(String[] args) {
-        File file = saveExcel();
-        System.out.println(file.getAbsolutePath());
+//        File file = saveExcel();
+//        System.out.println(file.getAbsolutePath());
     }
 
     public static void saveToExcel(ArrayList<Pair<Pair<Integer, String>, Integer>> table,
                                    ArrayList<Pair<Pair<Integer, String>, Integer>> back) {
         init();
         try {
-            File file = saveExcel();
+            File file = saveExcel(FILE_SLR);
             if (file.exists()) {
                 file.delete();
             }
@@ -146,9 +151,118 @@ public class ExcelHelper {
         map.put("factor", ++k); map2.put(k, "factor");
     }
 
-    public static File saveExcel() {
+    public static void saveClosure(Map<Goto,Integer> go, Closure[] C, int num) {
+
+        try {
+            File file = saveExcel(FILE_CLOSURE);
+            if (file.exists()) {
+                file.delete();
+            }
+
+            WritableWorkbook wwb = Workbook.createWorkbook(file);
+            WritableSheet ws = wwb.createSheet("LR(0)项目集族", 0);
+
+
+            ws.addCell(new Label(0, 0, "状态"));
+            ws.addCell(new Label(1, 0, "项目集"));
+            ws.addCell(new Label(2, 0, "后继符号"));
+            ws.addCell(new Label(3, 0, "后继状态"));
+
+            int row = 1;
+            for(int i = 0; i < num; i++) {
+                ws.addCell(new Label(0, row, "S" + i)); // 状态
+//                System.out.println("----------S"+i+"----------");
+                for(int j = 0; j < C[i].number; j++, row++) {
+                    int a = C[i].result[j][0];
+                    int position = C[i].result[j][1];
+
+                    String B = Grammer.getPro(a);
+
+                    String[] s = B.split(" ");
+
+                    StringBuilder builder = new StringBuilder(Grammer.nonTerminal[Grammer.getLeft(a)] + " 👉 ");
+
+                    for(int k = 0; k < s.length; k++) {
+                        if(k == position){
+                            builder.append("· ");
+//                            System.out.print("。"+" ");
+                        }
+                        builder.append(s[k] + " ");
+//                        System.out.print(s[k]+" ");
+                    }
+                    if(position >= s.length) {
+                        builder.append("· ");
+//                        System.out.print("。");
+                    }
+
+                    ws.addCell(new Label(1, row, builder.toString())); // 项目集
+
+                    // 后继符号
+                    String next = Grammer.getNext(a, position);
+                    if (next == null) {
+                        next = Grammer.nonTerminal[Grammer.getLeft(a)] + " 👉 " + B;
+                        next = next.trim();
+                        if (next.endsWith("👉")) {
+                            next = next + " ε";
+                        }
+                        ws.addCell(new Label(2, row, "# " + next));
+                    } else {
+                        ws.addCell(new Label(2, row, next));
+                    }
+
+                    String CC =Grammer.getNext(a, position);
+                    Goto temp = new Goto(i,CC);
+//                    System.out.println("-----------S"+go.get(temp));
+
+                    // 后继状态
+                    if (go.get(temp) == null) {
+                        ws.addCell(new Label(3, row, "S" + num));
+                    } else {
+                        ws.addCell(new Label(3, row, "S" + go.get(temp)));
+                    }
+                }
+            }
+            wwb.write();
+            wwb.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void saveAnalysis(ArrayList<String> stack, ArrayList<String> action) {
+
+        try {
+            File file = saveExcel(FILE_ANALYSIS);
+            if (file.exists()) {
+                file.delete();
+            }
+
+            WritableWorkbook wwb = Workbook.createWorkbook(file);
+            WritableSheet ws = wwb.createSheet("语法分析", 0);
+
+
+            ws.addCell(new Label(0, 0, "栈"));
+            ws.addCell(new Label(1, 0, "动作"));
+
+            for (int i = 0; i < stack.size(); i++) {
+                ws.addCell(new Label(0, i + 1, stack.get(i))); // 栈
+                ws.addCell(new Label(1, i + 1, action.get(i))); // 动作
+            }
+
+            wwb.write();
+            wwb.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static File saveExcel(String filename) {
         String rootPah = "first\\file\\";
         File dir = new File(rootPah);
-        return new File(dir, FILENAME);
+        return new File(dir, filename);
     }
 }

@@ -33,7 +33,8 @@ public class Test {
 			extendClosure(C[i],i);
 		}
 
-		print();
+//		print();
+		ExcelHelper.saveClosure(go, C, num);
 		
 	}
 	
@@ -171,6 +172,41 @@ public class Test {
 		}
 		
 	}
+	
+	public void printStack(Stack<Integer> stack) {
+		int length = stack.size();
+		int[] temp = new int[length];
+
+		for(int i = 0; i < length; i++) {
+			temp[i] = stack.pop();
+		}
+
+		for(int i = length - 1; i >= 0; i--) {
+			stack.push(temp[i]);
+			System.out.print(temp[i] + " ");
+		}
+		System.out.println();
+	}
+
+	public String getSingleStack(Stack<Integer> stack) {
+
+		StringBuilder builder = new StringBuilder();
+
+		int length = stack.size();
+		int[] temp = new int[length];
+
+		for(int i = 0; i < length; i++) {
+			temp[i] = stack.pop();
+		}
+
+		for(int i = length - 1; i >= 0; i--) {
+			stack.push(temp[i]);
+//			System.out.print(temp[i] + " ");
+			builder.append(temp[i] + " ");
+		}
+//		System.out.println();
+		return builder.toString();
+	}
 
 	
 	/**
@@ -179,6 +215,9 @@ public class Test {
 	public void parser() {
 		Stack<Integer> stack = new Stack<Integer>();
 		String[] input = FileHelper.getInputFromText();
+
+		ArrayList<String> arrayStack = new ArrayList<>();
+		ArrayList<String> arrayAction = new ArrayList<>();
 		
 		int status = 0;//初始状态S0
 		stack.push(status);
@@ -186,6 +225,9 @@ public class Test {
 //		String oldpeek = input[0];
 		
 		for(int i = 0; i < input.length;) {
+			
+			printStack(stack);
+			arrayStack.add(getSingleStack(stack));
 //			System.out.println(status+" "+input[i]+" "+peek);
 			Goto temp = new Goto(status,peek);
 			//判断对当前输入
@@ -193,11 +235,13 @@ public class Test {
 				if(go.get(temp) == null) {
 //					putError();	
 					System.out.println("!");
+					arrayAction.add("!");
 					break;
 				}
 				else {
 					//移入
 					System.out.println("Action:移入"+peek);
+					arrayAction.add("移入"+peek);
 					status = go.get(temp);
 					stack.push(status);
 					i++;
@@ -211,10 +255,13 @@ public class Test {
 					
 					if(num == 0) {
 						System.out.println("Action:接受");
+						arrayAction.add("接受");
 						break;//ACC
 					}
 					String A = Grammer.nonTerminal[Grammer.getLeft(num)];
 					System.out.println("Action:按照第"+num+"条文法规约为"+A);
+
+					arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
 					
 					
 					/**
@@ -243,6 +290,11 @@ public class Test {
 					
 				}
 				else {
+//					System.out.println("Action:移入"+peek);
+//					status = go.get(temp);
+//					stack.push(status);
+//					i++;
+//					peek = input[i];
 					System.out.println("?");
 					break;
 					//二义
@@ -250,6 +302,9 @@ public class Test {
 			}
 			
 		}
+
+		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
+
 	}
 	
 	public void printGo() {
@@ -388,8 +443,7 @@ public class Test {
 //		test.printBack();
 //		test.printGo();
 		test.parser();
-		
-		
+
 //		test.ExportExcel();
 		
 //		for(int i = 0; i < 26; i++) {

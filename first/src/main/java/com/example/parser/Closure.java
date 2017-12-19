@@ -1,13 +1,13 @@
 package com.example.parser;
 
 public class Closure {
-	
+
 	int id;//项目集编号
-	int [][] result = new int[550][2];//产生式，第一个数字记录产生式编号，第二个记录当前.的位置
+	public int [][] result = new int[550][2];//产生式，第一个数字记录产生式编号，第二个记录当前.的位置
 //	LinkedHashMap<Integer,Integer> production = new LinkedHashMap<Integer, Integer>();
 	int[][] rem = new int[55][55];//根据产生式编号与.位置记录产生式是否添加过
 	String[] next = new String[55];//下一个字符
-	int number = 0;
+	public int number = 0;
 	
 	public void init(int a,int[][] b,int c) {
 		for(int i = 0; i < 55; i++) {
