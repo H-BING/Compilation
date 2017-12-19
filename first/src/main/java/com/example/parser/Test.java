@@ -308,6 +308,8 @@ public class Test {
 				}
 				else {
 					System.out.println("Action:移入"+peek);
+					arrayAction.add("移入"+peek);
+
 					status = go.get(temp);
 					stack.push(status);
 					i++;

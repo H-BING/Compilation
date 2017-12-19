@@ -246,6 +246,8 @@ public class ExcelHelper {
             ws.addCell(new Label(0, 0, "栈"));
             ws.addCell(new Label(1, 0, "动作"));
 
+            System.out.println(stack.size());
+            System.out.println(action.size());
             for (int i = 0; i < stack.size(); i++) {
                 ws.addCell(new Label(0, i + 1, stack.get(i))); // 栈
                 ws.addCell(new Label(1, i + 1, action.get(i))); // 动作
