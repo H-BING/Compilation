@@ -8,5 +8,6 @@
 			    while id + id * id > id do begin id := id + id ^ num - num end ;
 			     id := id * num + id
 			end
+			end
 		end .
 
