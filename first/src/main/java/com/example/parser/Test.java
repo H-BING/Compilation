@@ -243,7 +243,7 @@ public class Test {
 //						C[status].next[0]
 						
 						
-						break;
+//						break;
 					}
 					
 				}
