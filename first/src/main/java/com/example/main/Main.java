@@ -33,8 +33,8 @@ public class Main extends Frame {
 	public static int length = 0;
 	public static JTextArea output = new JTextArea();
 	public static JTextArea input = new JTextArea();
-	public static String FILE_INPUT = "first\\file\\test2.txt";
-	public static String FILE_OUTPUT = "first\\file\\output.txt";
+	public static String FILE_INPUT = "file\\test1.txt";
+	public static String FILE_OUTPUT = "file\\output.txt";
 	public Main() {
 		JPanel panel1 = new JPanel();
 		addInput(panel1);
@@ -50,12 +50,12 @@ public class Main extends Frame {
 //    	new Main().lanchar();
 //		getInputFromText();
 		write();
-//		output();
+		output();
 		outputToFile();
-		String[] str = FileHelper.getInputFromText();
-		for (int i = 0; i < str.length; i++) {
-			System.out.println(str[i]);
-		}
+//		String[] str = FileHelper.getInputFromText();
+//		for (int i = 0; i < str.length; i++) {
+//			System.out.println(str[i]);
+//		}
 //		System.out.println(getInputFromText());
     }
 
