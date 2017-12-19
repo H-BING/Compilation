@@ -208,9 +208,25 @@ public class Test {
 			//判断对当前输入
 			if(back.get(temp) == null) {
 				if(go.get(temp) == null) {
-//					putError();	
-					System.out.println("!");
-					break;
+					/*如果对于下个符号可以有action将当前符号丢弃*/
+					Goto t = new Goto(status,input[i+1]);
+					
+					if(go.get(t) != null || back.get(t) != null) {
+						i++;
+						peek = input[i];
+						System.out.println("!");
+					}
+					else {
+//						/**
+//						 * 当成缺少符号，规约
+//						 */
+//						stack.pop();
+//						status = stack.pop();
+//						stack.push(status);
+						break;
+					}
+					
+//					break;
 				}
 				else {
 					//移入
@@ -260,13 +276,13 @@ public class Test {
 					
 				}
 				else {
-//					System.out.println("Action:移入"+peek);
-//					status = go.get(temp);
-//					stack.push(status);
-//					i++;
-//					peek = input[i];
-					System.out.println("?");
-					break;
+					System.out.println("Action:移入"+peek);
+					status = go.get(temp);
+					stack.push(status);
+					i++;
+					peek = input[i];
+//					System.out.println("?");
+//					break;
 					//二义
 				}
 			}
