@@ -1,6 +1,7 @@
-program id ;
-begin
+program id ; 
+begin 
 id
 :=
 id
-end .
+end
+.

@@ -26,17 +26,17 @@ public class Test {
 	 */
 	public void items() {
 		init();//初始化S0
-		
+//		Goto temp = new Goto(1,"$");
+//		back.put(temp, 0);
 		//拓展
 		for(int i = 0; i < num; i++) {
 			extendClosure(C[i],i);
 		}
 
-		print();
+//		print();
 		
 	}
 	
-
 	private void print() {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < num; i++) {
@@ -67,6 +67,7 @@ public class Test {
 	}
 
 	private void init() {
+		
 		C[0] = new Closure();
 		// TODO Auto-generated method stub
 		begin[0][0] = 0;
@@ -182,7 +183,7 @@ public class Test {
 		int status = 0;//初始状态S0
 		stack.push(status);
 		String peek = input[0];
-		
+//		String oldpeek = input[0];
 		
 		for(int i = 0; i < input.length;) {
 //			System.out.println(status+" "+input[i]+" "+peek);
@@ -191,32 +192,59 @@ public class Test {
 			if(back.get(temp) == null) {
 				if(go.get(temp) == null) {
 //					putError();	
+					System.out.println("!");
+					break;
 				}
 				else {
 					//移入
+					System.out.println("Action:移入"+peek);
 					status = go.get(temp);
 					stack.push(status);
 					i++;
 					peek = input[i];
-					System.out.println(status+"Action:移入"+peek);
 				}
 			}
 			else {
 				if(go.get(temp) == null) {
 					//规约
-					if(back.get(temp) ==0 ) {
+					int num = back.get(temp);
+					
+					if(num == 0) {
+						System.out.println("Action:接受");
 						break;//ACC
 					}
-					int num = back.get(temp);
-					peek = Grammer.nonTerminal[Grammer.getLeft(num)];
-//					System.out.println(status);
-					stack.pop();
+					String A = Grammer.nonTerminal[Grammer.getLeft(num)];
+					System.out.println("Action:按照第"+num+"条文法规约为"+A);
+					
+					
+					/**
+					 * A->B
+					 * 从栈中弹出B的个数个符号
+					 */
+					String[] nums = Grammer.getPro(num).split(" ");
+					for(int k = 0; k < nums.length; k++) {
+						stack.pop();
+					}
 					status = stack.pop();
 					stack.push(status);
-//					System.out.println(status);
-					System.out.println(status+"Action:按照第"+num+"条文法规约为"+peek);
+					
+					if(go.get(new Goto(status,A))== null) {
+//						System.out.println(status+" "+A);
+						//归结
+//						break;
+//						i++;
+//						peek = input[i];
+//						continue;
+					}
+					else {
+						status = go.get(new Goto(status,A));
+						stack.push(status);
+					}				
+					
 				}
 				else {
+					System.out.println("?");
+					break;
 					//二义
 				}
 			}
@@ -250,12 +278,12 @@ public class Test {
 			}
 		});
 
-//		for (int i = 0; i < tableGoto.size(); i++) {
-//			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
-//					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
-//		}
+		for (int i = 0; i < tableGoto.size(); i++) {
+			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
+					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
+		}
 
-		ExcelHelper.saveToExcel(tableGoto);
+//		ExcelHelper.saveToExcel(tableGoto);
 	}
 
 	public void ExportExcel() {
@@ -352,11 +380,12 @@ public class Test {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
-		test.printBack();
-//		test.parser();
-		
+//		test.printBack();
 //		test.printGo();
-		test.ExportExcel();
+		test.parser();
+		
+		
+//		test.ExportExcel();
 		
 //		// TODO Auto-generated method stub
 //		for(int i = 0; i < 26; i++) {

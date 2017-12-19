@@ -12,9 +12,9 @@ import java.io.InputStreamReader;
 
 public class FileHelper {
 
-//    public static String FILE_INPUT = "file\\test2.txt";
-    public static String FILE_INPUT = "first/file/test2.txt";
-    public static String FILE_OUTPUT = "first/file/output.txt";
+    public static String FILE_INPUT = "file/test2.txt";
+//    public static String FILE_INPUT = "first/file/test2.txt";
+//    public static String FILE_OUTPUT = "first/file/output.txt";
 
     /*public static String getInputFromText(String filePath) {
         StringBuilder builder = new StringBuilder("");
