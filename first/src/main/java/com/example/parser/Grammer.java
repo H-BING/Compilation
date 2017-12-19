@@ -14,7 +14,7 @@ public class Grammer {
 	
 	//表达式右部
 	static String[] grammer = new String[] {
-			"S",
+			"S", /* s' */
 			"program id ; compound_stmt .",
 			"begin stmts end",
 			"stmt","stmts ; stmt",
