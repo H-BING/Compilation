@@ -207,26 +207,45 @@ public class Test {
 			Goto temp = new Goto(status,peek);
 			//判断对当前输入
 			if(back.get(temp) == null) {
+				
 				if(go.get(temp) == null) {
+					System.out.println("!");
 					/*如果对于下个符号可以有action将当前符号丢弃*/
 					Goto t = new Goto(status,input[i+1]);
 					
 					if(go.get(t) != null || back.get(t) != null) {
 						i++;
 						peek = input[i];
-						System.out.println("!");
+						
 					}
 					else {
 //						/**
 //						 * 当成缺少符号，规约
 //						 */
-//						stack.pop();
-//						status = stack.pop();
-//						stack.push(status);
+						stack.pop();
+						status = stack.pop();
+						stack.push(status);
+						t = new Goto(status,C[status].next[0]);
+						int aa = i;
+						while(C[status].next[0].equals(input[aa-1])) {
+							stack.pop();
+							status = stack.pop();
+							stack.push(status);
+//							go.get(t) == null && back.get(t) == null
+						    System.out.println(C[status].next[0]);
+						    t = new Goto(status,C[status].next[0]);
+						    aa--;
+						}
+						
+						status = go.get(t);
+						System.out.println(status);
+						stack.push(status);
+//						C[status].next[0]
+						
+						
 						break;
 					}
 					
-//					break;
 				}
 				else {
 					//移入
