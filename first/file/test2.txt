@@ -1,7 +1,5 @@
-program id ; 
-begin 
-id
-:=
-id
-end
-.
+        program id ;
+	    begin
+		 id := num ;
+			     id := id * num + id
+		end .

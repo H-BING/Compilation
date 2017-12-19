@@ -30,7 +30,7 @@ public class Grammer {
 	static String[][] follow = new String[][] {
 			{"$"}, /* s' */
 			{"$"}, /* s */
-			{"."}, /* compound_stmt */
+			{".", "end", ";", "else"}, /* compound_stmt */
 			{"end", ";"}, /* stmts */
 			{"end", ";", "else"}, /* stmt */
 			{"end", ";", "else"}, /* if_stmt */
