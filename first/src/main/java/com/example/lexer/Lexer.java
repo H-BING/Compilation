@@ -88,7 +88,7 @@ public class Lexer {
      * @return true/false
      * @throws IOException
      */
-    boolean readch(char c) throws IOException {
+    boolean readch(char c)  {
         readch();
         if (peek != c) {
             return false;
@@ -97,7 +97,7 @@ public class Lexer {
         return true;
     }
 
-    public Token scan() throws IOException {
+    public Token scan() {
 
         peek = ' ';//清空，防止上次数据干扰
 

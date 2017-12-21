@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
+import com.example.main.Main;
 import com.example.tool.ExcelHelper;
 import com.example.tool.FileHelper;
 
@@ -214,7 +215,11 @@ public class Test {
 	 */
 	public void parser() {
 		Stack<Integer> stack = new Stack<Integer>();
-		String[] input = FileHelper.getInputFromText();
+//		String[] input = FileHelper.getInputFromText();
+		String[] input = Main.getSLR1Input();
+//		for (int i = 0; i < inputSLR1.length; i++) {
+//			System.out.println(inputSLR1[i]);
+//		}
 
 		ArrayList<String> arrayStack = new ArrayList<>();
 		ArrayList<String> arrayAction = new ArrayList<>();

@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -33,8 +34,8 @@ public class Main extends Frame {
 	public static int length = 0;
 	public static JTextArea output = new JTextArea();
 	public static JTextArea input = new JTextArea();
-	public static String FILE_INPUT = "file\\test1.txt";
-	public static String FILE_OUTPUT = "file\\output.txt";
+	public static String FILE_INPUT = "first\\file\\test1.txt";
+	public static String FILE_OUTPUT = "first\\file\\output.txt";
 	public Main() {
 		JPanel panel1 = new JPanel();
 		addInput(panel1);
@@ -49,14 +50,15 @@ public class Main extends Frame {
     public static void main(String[] args) throws IOException {
 //    	new Main().lanchar();
 //		getInputFromText();
-		write();
-		output();
-		outputToFile();
+//		write();
+//		output();
+//		outputToFile();
 //		String[] str = FileHelper.getInputFromText();
 //		for (int i = 0; i < str.length; i++) {
 //			System.out.println(str[i]);
 //		}
 //		System.out.println(getInputFromText());
+		getSLR1Input();
     }
 
     public static String getInputFromText() {
@@ -72,7 +74,7 @@ public class Main extends Frame {
 					builder.append(input).append("\n");
 				}
 			} else {
-				System.out.println("找不到指定文件！");
+				System.out.println("�Ҳ���ָ���ļ���");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,9 +141,9 @@ public class Main extends Frame {
 		outputStream.write(data);
 		outputStream.close();
 	}
-    
-	public static void write() throws IOException {
-  
+
+	public static void write()  {
+
     	Lexer lex = new Lexer();
     	length = 0;
     	for(int i = 0; ;i++) {
@@ -153,8 +155,29 @@ public class Main extends Frame {
     		length++;
     	}
     }
+
+    public static String[] getSLR1Input() {
+		write();
+		ArrayList<String> input = new ArrayList<>();
+		for (int i = 0; tok[i].tag != 40000; i++) {
+			switch (tok[i].tag) {
+				case Tag.NUM:
+					input.add("num");
+					break;
+				case Tag.ID:
+					input.add("id");
+					break;
+				default:
+					input.add(tok[i].toString().toLowerCase());
+					break;
+			}
+		}
+		input.add("$");
+
+		return (String[]) input.toArray(new String[input.size()]);
+	}
     	/**
-    	 * 杈撳嚭璇嶆硶鍒嗘瀽缁撴灉
+    	 * 输出词法分析结果
     	 */
     public static void output() {
     	for(int i = 0; i < length; i++) {
@@ -232,25 +255,25 @@ public class Main extends Frame {
 	public void lanchar(){
 
 		this.setBounds(x, y, width, height);
-		this.setTitle("PASCAL缂栬瘧鍣�");
+		this.setTitle("PASCAL编译�?");
 		this.setBackground(Color.white);
 		this.setResizable(false);
 		this.setLayout(null);
 
 
-		//鍦ㄧ獥浣撲簨浠舵簮涓婃坊鍔犲甫鏈夊鐞嗕簨浠剁殑鐩戝惉鍣ㄣ��
+		//在窗体事件源上添加带有处理事件的监听器�??
 		this.addWindowListener(new WindowAdapter(){
 
 			public void windowClosing(WindowEvent e){
-				System.exit(0);//鍏抽棴绐楀彛澶勭悊鍏抽棴鍔ㄤ綔鐩戝惉浜嬩欢
+				System.exit(0);//关闭窗口处理关闭动作监听事件
 			}
 		});
 
 
 		/**
-		 * 娣诲姞鎸夐挳鐩戝惉
+		 * 添加按钮监听
 		 */
-		Button b=new Button("缂栬瘧");//鍦ㄧ獥鍙ｄ腑娣诲姞涓�涓寜閽紱
+		Button b=new Button("编译");//在窗口中添加�?个按钮；
 		b.setBounds(30, 30, 40, 20);
 		b.addActionListener(new ActionListener() {
 
@@ -260,7 +283,7 @@ public class Main extends Frame {
 				output();
 			}
 		});
-		this.add(b);//灏嗘寜閽坊鍔犲埌绐楀彛鍐�
+		this.add(b);//将按钮添加到窗口�?
 
 		this.setVisible(true);
 
