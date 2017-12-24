@@ -91,12 +91,33 @@ public class Test {
 			//规约项目,将该文法Follows所有
 			if(B == null) {
 				int a = closure.result[i][0];//第几条文法
+
+				String second = Grammer.getNext(a, 1);
+				System.out.println(second);
+
+
 				String[] follows = Grammer.getFollows(a);
 				for(int j = 0; j < follows.length; j++) {
 					Goto back1 = new Goto(id,follows[j]);
-				    back.put(back1, a);
+//					back.put(back1, a);
+
+//					if (second != null) {
+//						if (second.equals("+") || second.equals("-")) {
+//							if (follows[j].equals("+") || follows[j].equals("-")) {
+//								back.put(back1, a);
+//							}
+//						} else if (second.equals("*") || second.equals("/")) {
+//							if (follows[j].equals("+") || follows[j].equals("-") || follows[j].equals("*") || follows[j].equals("/")) {
+//								back.put(back1, a);
+//							}
+//						} else {
+//							back.put(back1, a);
+//						}
+//					} else {
+						back.put(back1, a);
+//					}
+
 				}
-				
 			}
 
 			//B非空，为待约项目
@@ -209,12 +230,38 @@ public class Test {
 		return builder.toString();
 	}
 
+	public String getSignStack(Stack<String> stack) {
+
+		StringBuilder builder = new StringBuilder();
+
+		int length = stack.size();
+//		int[] temp = new int[length];
+		ArrayList<String> temp = new ArrayList<String>();
+
+		for(int i = 0; i < length; i++) {
+//			temp[i] = stack.pop();
+			temp.add(stack.pop());
+		}
+
+		for(int i = length - 1; i >= 0; i--) {
+//			stack.push(temp[i]);
+////			System.out.print(temp[i] + " ");
+//			builder.append(temp[i] + " ");
+
+			stack.push(temp.get(i));
+			builder.append(temp.get(i)).append(" ");
+		}
+//		System.out.println();
+		return builder.toString();
+	}
+
 	
 	/**
 	 * 处理输入，判断对当前输入字符串采取动作
 	 */
 	public void parser() {
 		Stack<Integer> stack = new Stack<Integer>();
+		Stack<String> sign = new Stack<>();
 //		String[] input = FileHelper.getInputFromText();
 		String[] input = Main.getSLR1Input();
 //		for (int i = 0; i < inputSLR1.length; i++) {
@@ -232,57 +279,72 @@ public class Test {
 		for(int i = 0; i < input.length;) {
 			
 			printStack(stack);
-			arrayStack.add(getSingleStack(stack));
+			arrayStack.add(getSignStack(sign));
 //			System.out.println(status+" "+input[i]+" "+peek);
 			Goto temp = new Goto(status,peek);
 			//判断对当前输入
 			if(back.get(temp) == null) {
 				
 				if(go.get(temp) == null) {
-					System.out.println("!");
-					arrayAction.add("!");
+					System.out.println("!!!!!!!!!!!!!Error!!!!!!!!!!!!!");
+					arrayAction.add("Error");
+
+
 					/*如果对于下个符号可以有action将当前符号丢弃*/
-					Goto t = new Goto(status,input[i+1]);
+
+
+//					Goto t = new Goto(status,input[i+1]);
+					break;
 					
-					if(go.get(t) != null || back.get(t) != null) {
-						i++;
-						peek = input[i];
-//						System.out.println("!");
-//						arrayAction.add("!");
-					}
-					else {
-//						/**
-//						 * 当成缺少符号，规约
-//						 */
-						stack.pop();
-						status = stack.pop();
-						stack.push(status);
-						t = new Goto(status,C[status].next[0]);
-						int aa = i;
-						while(C[status].next[0].equals(input[aa-1])) {
-							stack.pop();
-							status = stack.pop();
-							stack.push(status);
-//							go.get(t) == null && back.get(t) == null
-						    System.out.println(C[status].next[0]);
-						    t = new Goto(status,C[status].next[0]);
-						    aa--;
-						}
-						
-						status = go.get(t);
-						System.out.println(status);
-						stack.push(status);
-//						C[status].next[0]
-						
-						
-//						break;
-					}
+//					if(go.get(t) != null || back.get(t) != null) {
+////						arrayAction.add("Error: push " + input[i]);
+//						i++;
+//						peek = input[i];
+////						System.out.println("!");
+////						arrayAction.add("!");
+//
+//					}
+//					else {
+////						/**
+////						 * 当成缺少符号，规约
+////						 */
+//						stack.pop();
+//						sign.pop();
+//
+////						arrayAction.add("Error");
+//
+//						status = stack.pop();
+//						stack.push(status);
+//						t = new Goto(status,C[status].next[0]);
+//						int aa = i;
+//						while(C[status].next[0].equals(input[aa-1])) {
+//							stack.pop();
+//							sign.pop();
+//
+//							status = stack.pop();
+//							stack.push(status);
+////							go.get(t) == null && back.get(t) == null
+//						    System.out.println(C[status].next[0]);
+//						    t = new Goto(status,C[status].next[0]);
+//						    aa--;
+//						}
+//
+//						status = go.get(t);
+//						System.out.println(status);
+//						stack.push(status);
+//						sign.push(C[status].next[0]);
+////						C[status].next[0]
+//
+//
+////						break;
+//					}
 					
 				}
 				else {
 					//移入
 					System.out.println("Action:移入"+peek);
 					arrayAction.add("移入"+peek);
+					sign.push(peek);
 					status = go.get(temp);
 					stack.push(status);
 					i++;
@@ -312,6 +374,7 @@ public class Test {
 					String[] nums = Grammer.getPro(num).split(" ");
 					for(int k = 0; k < nums.length; k++) {
 						stack.pop();
+						sign.pop();
 					}
 					status = stack.pop();
 					stack.push(status);
@@ -327,12 +390,91 @@ public class Test {
 					else {
 						status = go.get(new Goto(status,A));
 						stack.push(status);
+						sign.push(A);
 					}				
 					
 				}
 				else {
+					//二义
+
+					int num = back.get(temp); // 哪一条文法归约
+					String second = Grammer.getNext(num, 1);
+					System.out.println(" ========================= " + second + " " + peek);
+
+					if (second.equals("+") || second.equals("-")) {
+						if (peek.equals("+") || peek.equals("-")) {
+							// 归约
+
+//							System.out.println("========================== ");
+
+							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
+							System.out.println("Action:按照第"+num+"条文法规约为"+A);
+							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
+
+							/**
+							 * A->B
+							 * 从栈中弹出B的个数个符号
+							 */
+							String[] nums = Grammer.getPro(num).split(" ");
+							for(int k = 0; k < nums.length; k++) {
+								stack.pop();
+								sign.pop();
+							}
+							status = stack.pop();
+							stack.push(status);
+
+							if(go.get(new Goto(status,A))== null) {
+
+							}
+							else {
+								status = go.get(new Goto(status,A));
+								stack.push(status);
+								sign.push(A);
+							}
+
+							continue;
+						}
+					} else if (second.equals("*") || second.equals("/")) {
+						if (peek.equals("+") || peek.equals("-") || peek.equals("*") || peek.equals("/")) {
+							// 归约
+
+//							System.out.println("========================== *****");
+
+							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
+							System.out.println("Action:按照第"+num+"条文法规约为"+A);
+							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
+
+							/**
+							 * A->B
+							 * 从栈中弹出B的个数个符号
+							 */
+							String[] nums = Grammer.getPro(num).split(" ");
+							for(int k = 0; k < nums.length; k++) {
+								stack.pop();
+								sign.pop();
+							}
+							status = stack.pop();
+							stack.push(status);
+
+							if(go.get(new Goto(status,A))== null) {
+
+							}
+							else {
+								status = go.get(new Goto(status,A));
+								stack.push(status);
+								sign.push(A);
+							}
+
+							continue;
+						}
+					}
+
+
 					System.out.println("Action:移入"+peek);
 					arrayAction.add("移入"+peek);
+
+
+					sign.push(peek);
 
 					status = go.get(temp);
 					stack.push(status);
@@ -340,7 +482,6 @@ public class Test {
 					peek = input[i];
 //					System.out.println("?");
 //					break;
-					//二义
 				}
 			}
 			
@@ -487,7 +628,7 @@ public class Test {
 //		test.printGo();
 		test.parser();
 
-//		test.ExportExcel();
+		test.ExportExcel();
 		
 //		for(int i = 0; i < 26; i++) {
 ////     	    String next = Grammer.getNext(i, 2);
