@@ -101,21 +101,31 @@ public class Test {
 					Goto back1 = new Goto(id,follows[j]);
 //					back.put(back1, a);
 
-//					if (second != null) {
-//						if (second.equals("+") || second.equals("-")) {
+					if (second != null) {
+						if (second.equals("+") || second.equals("-")) {
+							if (follows[j].equals("*") || follows[j].equals("/") || follows[j].equals("^")) {
+								// 不归约
+							} else {
+								back.put(back1, a);
+							}
 //							if (follows[j].equals("+") || follows[j].equals("-")) {
 //								back.put(back1, a);
 //							}
-//						} else if (second.equals("*") || second.equals("/")) {
+						} else if (second.equals("*") || second.equals("/")) {
+							if (follows[j].equals("^")) {
+								// 不归约
+							} else {
+								back.put(back1, a);
+							}
 //							if (follows[j].equals("+") || follows[j].equals("-") || follows[j].equals("*") || follows[j].equals("/")) {
 //								back.put(back1, a);
 //							}
-//						} else {
-//							back.put(back1, a);
-//						}
-//					} else {
+						} else {
+							back.put(back1, a);
+						}
+					} else {
 						back.put(back1, a);
-//					}
+					}
 
 				}
 			}
