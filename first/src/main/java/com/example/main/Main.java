@@ -34,7 +34,8 @@ public class Main extends Frame {
 	public static int length = 0;
 	public static JTextArea output = new JTextArea();
 	public static JTextArea input = new JTextArea();
-	public static String FILE_INPUT = "first\\file\\test1.txt";
+	public static String FILE_INPUT = "file/test1.txt";
+	
 	public static String FILE_OUTPUT = "first\\file\\output.txt";
 	public Main() {
 		JPanel panel1 = new JPanel();
@@ -261,7 +262,7 @@ public class Main extends Frame {
 		this.setLayout(null);
 
 
-		//在窗体事件源上添加带有处理事件的监听器�??
+		//在窗体事件源上添加带有处理事件的监听器
 		this.addWindowListener(new WindowAdapter(){
 
 			public void windowClosing(WindowEvent e){

@@ -35,7 +35,7 @@ public class Test {
 		}
 
 //		print();
-		ExcelHelper.saveClosure(go, C, num);
+//		ExcelHelper.saveClosure(go, C, num);
 		
 	}
 	
@@ -93,7 +93,7 @@ public class Test {
 				int a = closure.result[i][0];//第几条文法
 
 				String second = Grammer.getNext(a, 1);
-				System.out.println(second);
+//				System.out.println(second);
 
 
 				String[] follows = Grammer.getFollows(a);
@@ -103,14 +103,12 @@ public class Test {
 
 					if (second != null) {
 						if (second.equals("+") || second.equals("-")) {
-							if (follows[j].equals("*") || follows[j].equals("/") || follows[j].equals("^")) {
-								// 不归约
-							} else {
+							if (follows[j].equals("/") || follows[j].equals("*") || follows[j].equals("^")) {
+								
+							} 
+							else {
 								back.put(back1, a);
 							}
-//							if (follows[j].equals("+") || follows[j].equals("-")) {
-//								back.put(back1, a);
-//							}
 						} else if (second.equals("*") || second.equals("/")) {
 							if (follows[j].equals("^")) {
 								// 不归约
@@ -157,9 +155,17 @@ public class Test {
 					    temp.init(id, begin, number);
 					    C[num] = temp;
 					    go.put(goto1, num++);
+					    
+					    
+					    
 					}
 					else {
-						go.put(goto1,nextStatus);
+						
+						
+//						System.out.println(id +" "+B);
+						if(back.get(goto1) == null) {
+							go.put(goto1,nextStatus);
+					    }
 					}
 					
 					
@@ -296,13 +302,12 @@ public class Test {
 			if(back.get(temp) == null) {
 				
 				if(go.get(temp) == null) {
+					
 					System.out.println("!!!!!!!!!!!!!Error!!!!!!!!!!!!!");
 					arrayAction.add("Error");
 
 
 					/*如果对于下个符号可以有action将当前符号丢弃*/
-
-
 //					Goto t = new Goto(status,input[i+1]);
 					break;
 					
@@ -411,74 +416,74 @@ public class Test {
 					String second = Grammer.getNext(num, 1);
 					System.out.println(" ========================= " + second + " " + peek);
 
-					if (second.equals("+") || second.equals("-")) {
-						if (peek.equals("+") || peek.equals("-")) {
-							// 归约
-
-//							System.out.println("========================== ");
-
-							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
-							System.out.println("Action:按照第"+num+"条文法规约为"+A);
-							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
-
-							/**
-							 * A->B
-							 * 从栈中弹出B的个数个符号
-							 */
-							String[] nums = Grammer.getPro(num).split(" ");
-							for(int k = 0; k < nums.length; k++) {
-								stack.pop();
-								sign.pop();
-							}
-							status = stack.pop();
-							stack.push(status);
-
-							if(go.get(new Goto(status,A))== null) {
-
-							}
-							else {
-								status = go.get(new Goto(status,A));
-								stack.push(status);
-								sign.push(A);
-							}
-
-							continue;
-						}
-					} else if (second.equals("*") || second.equals("/")) {
-						if (peek.equals("+") || peek.equals("-") || peek.equals("*") || peek.equals("/")) {
-							// 归约
-
-//							System.out.println("========================== *****");
-
-							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
-							System.out.println("Action:按照第"+num+"条文法规约为"+A);
-							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
-
-							/**
-							 * A->B
-							 * 从栈中弹出B的个数个符号
-							 */
-							String[] nums = Grammer.getPro(num).split(" ");
-							for(int k = 0; k < nums.length; k++) {
-								stack.pop();
-								sign.pop();
-							}
-							status = stack.pop();
-							stack.push(status);
-
-							if(go.get(new Goto(status,A))== null) {
-
-							}
-							else {
-								status = go.get(new Goto(status,A));
-								stack.push(status);
-								sign.push(A);
-							}
-
-							continue;
-						}
-					}
-
+//					if (second.equals("+") || second.equals("-")) {
+//						if (peek.equals("+") || peek.equals("-")) {
+//							// 归约
+//
+////							System.out.println("========================== ");
+//
+//							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
+//							System.out.println("Action:按照第"+num+"条文法规约为"+A);
+//							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
+//
+//							/**
+//							 * A->B
+//							 * 从栈中弹出B的个数个符号
+//							 */
+//							String[] nums = Grammer.getPro(num).split(" ");
+//							for(int k = 0; k < nums.length; k++) {
+//								stack.pop();
+//								sign.pop();
+//							}
+//							status = stack.pop();
+//							stack.push(status);
+//
+//							if(go.get(new Goto(status,A))== null) {
+//
+//							}
+//							else {
+//								status = go.get(new Goto(status,A));
+//								stack.push(status);
+//								sign.push(A);
+//							}
+//
+//							continue;
+//						}
+//					} else if (second.equals("*") || second.equals("/")) {
+//						if (peek.equals("+") || peek.equals("-") || peek.equals("*") || peek.equals("/")) {
+//							// 归约
+//
+////							System.out.println("========================== *****");
+//
+//							String A = Grammer.nonTerminal[Grammer.getLeft(num)];
+//							System.out.println("Action:按照第"+num+"条文法规约为"+A);
+//							arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
+//
+//							/**
+//							 * A->B
+//							 * 从栈中弹出B的个数个符号
+//							 */
+//							String[] nums = Grammer.getPro(num).split(" ");
+//							for(int k = 0; k < nums.length; k++) {
+//								stack.pop();
+//								sign.pop();
+//							}
+//							status = stack.pop();
+//							stack.push(status);
+//
+//							if(go.get(new Goto(status,A))== null) {
+//
+//							}
+//							else {
+//								status = go.get(new Goto(status,A));
+//								stack.push(status);
+//								sign.push(A);
+//							}
+//
+//							continue;
+//						}
+//					}
+//
 
 					System.out.println("Action:移入"+peek);
 					arrayAction.add("移入"+peek);
@@ -497,7 +502,7 @@ public class Test {
 			
 		}
 
-		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
+//		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
 
 	}
 	
@@ -634,11 +639,11 @@ public class Test {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
-//		test.printBack();
-//		test.printGo();
+		test.printBack();
+		test.printGo();
 		test.parser();
 
-		test.ExportExcel();
+//		test.ExportExcel();
 		
 //		for(int i = 0; i < 26; i++) {
 ////     	    String next = Grammer.getNext(i, 2);
