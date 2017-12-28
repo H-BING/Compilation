@@ -34,7 +34,8 @@ public class Main extends Frame {
 	public static int length = 0;
 	public static JTextArea output = new JTextArea();
 	public static JTextArea input = new JTextArea();
-	public static String FILE_INPUT = "file/test1.txt";
+//	public static String FILE_INPUT = "file/test1.txt";
+	public static String FILE_INPUT = "first\\file\\test1.txt";
 	
 	public static String FILE_OUTPUT = "first\\file\\output.txt";
 	public Main() {
@@ -60,6 +61,7 @@ public class Main extends Frame {
 //		}
 //		System.out.println(getInputFromText());
 		getSLR1Input();
+		getSLR1InputValue();
     }
 
     public static String getInputFromText() {
@@ -75,7 +77,7 @@ public class Main extends Frame {
 					builder.append(input).append("\n");
 				}
 			} else {
-				System.out.println("�Ҳ���ָ���ļ���");
+				System.out.println("找不到指定文件！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,6 +158,17 @@ public class Main extends Frame {
     		length++;
     	}
     }
+
+	public static String[] getSLR1InputValue() {
+		write();
+		ArrayList<String> input = new ArrayList<>();
+		for (int i = 0; tok[i].tag != 40000; i++) {
+			input.add(tok[i].toString().toLowerCase());
+		}
+		input.add("$");
+
+		return (String[]) input.toArray(new String[input.size()]);
+	}
 
     public static String[] getSLR1Input() {
 		write();

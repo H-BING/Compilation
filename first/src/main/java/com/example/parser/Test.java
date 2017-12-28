@@ -35,7 +35,7 @@ public class Test {
 		}
 
 //		print();
-//		ExcelHelper.saveClosure(go, C, num);
+		ExcelHelper.saveClosure(go, C, num);
 		
 	}
 	
@@ -280,6 +280,7 @@ public class Test {
 		Stack<String> sign = new Stack<>();
 //		String[] input = FileHelper.getInputFromText();
 		String[] input = Main.getSLR1Input();
+		String[] value = Main.getSLR1InputValue();
 //		for (int i = 0; i < inputSLR1.length; i++) {
 //			System.out.println(inputSLR1[i]);
 //		}
@@ -502,7 +503,7 @@ public class Test {
 			
 		}
 
-//		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
+		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
 
 	}
 	
@@ -643,7 +644,7 @@ public class Test {
 		test.printGo();
 		test.parser();
 
-//		test.ExportExcel();
+		test.ExportExcel();
 		
 //		for(int i = 0; i < 26; i++) {
 ////     	    String next = Grammer.getNext(i, 2);
