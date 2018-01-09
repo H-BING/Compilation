@@ -1,6 +1,7 @@
 package com.example.parser;
 
 import com.example.base.Pair;
+import com.example.base.Tag;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class Test {
 	int num = 0;//C集合个数
 	Map<Goto,Integer> go = new HashMap<Goto,Integer>();
 	Map<Goto,Integer> back = new HashMap<Goto,Integer>();//规约表
+	
+	int offset = 100;//三地址代码初始地址
 	
 	/**
 	 * 构建项目集合与goto表
@@ -120,7 +123,16 @@ public class Test {
 //							if (follows[j].equals("+") || follows[j].equals("-") || follows[j].equals("*") || follows[j].equals("/")) {
 //								back.put(back1, a);
 //							}
-						} else {
+						} else if (second.equals("bool")) {
+							String third = Grammer.getNext(a, 2);
+							if(third.equals("then") && follows[j].equals("else")) {
+								
+							}else {
+								back.put(back1, a);
+							}
+							
+						}
+						else {
 							back.put(back1, a);
 						}
 					} else {
@@ -273,33 +285,50 @@ public class Test {
 		return builder.toString();
 	}
 
-	
+	public String getType(Token temp) {
+		String s = temp.toString().toLowerCase();
+		switch (temp.tag) {
+		case Tag.NUM:
+			s = "num";
+			break;
+		case Tag.ID:
+			s = "id";
+			break;
+		default:
+			break;
+				
+		}
+		return s;
+	}
 	/**
 	 * 处理输入，判断对当前输入字符串采取动作
 	 */
 	public void parser() {
 		Stack<Integer> stack = new Stack<Integer>();
 		Stack<String> sign = new Stack<>();
+		Stack<Token> tok= new Stack<Token>();
+		
 //		String[] input = FileHelper.getInputFromText();
-		String[] input = Main.getSLR1Input();
+//		String[] input = Main.getSLR1Input();
 		String[] value = Main.getSLR1InputValue();
 
 		Token[] tokens = Main.getSLR1InputToken();
-//		for (int i = 0; i < inputSLR1.length; i++) {
-//			System.out.println(inputSLR1[i]);
+//		for (int i = 0; i < tokens.length; i++) {
+//			System.out.println(getType(tokens[i])+" "+input[i]);
 //		}
 
 		ArrayList<String> arrayStack = new ArrayList<>();
 		ArrayList<String> arrayAction = new ArrayList<>();
 		
 		int status = 0;//初始状态S0
+		Token tokPop = new Token(0);//token栈顶
 		stack.push(status);
 		sign.push("$");
-		String peek = input[0];
-		String valuePeek = value[0];
-//		String oldpeek = input[0];
 		
-		for(int i = 0; i < input.length;) {
+		String peek = getType(tokens[0]);//下个读入
+		String valuePeek = value[0];
+		
+		for(int i = 0; i < tokens.length;) {
 			
 			printStack(stack);
 			arrayStack.add(getSignStack(sign));
@@ -312,54 +341,7 @@ public class Test {
 					
 					System.out.println("!!!!!!!!!!!!!Error!!!!!!!!!!!!!");
 					arrayAction.add("Error");
-
-					/*如果对于下个符号可以有action将当前符号丢弃*/
-//					Goto t = new Goto(status,input[i+1]);
 					break;
-
-//					if(go.get(t) != null || back.get(t) != null) {
-////						arrayAction.add("Error: push " + input[i]);
-//						i++;
-//						peek = input[i];
-////						System.out.println("!");
-////						arrayAction.add("!");
-//
-//					}
-//					else {
-////						/**
-////						 * 当成缺少符号，规约
-////						 */
-//						stack.pop();
-//						sign.pop();
-//
-////						arrayAction.add("Error");
-//
-//						status = stack.pop();
-//						stack.push(status);
-//						t = new Goto(status,C[status].next[0]);
-//						int aa = i;
-//						while(C[status].next[0].equals(input[aa-1])) {
-//							stack.pop();
-//							sign.pop();
-//
-//							status = stack.pop();
-//							stack.push(status);
-////							go.get(t) == null && back.get(t) == null
-//						    System.out.println(C[status].next[0]);
-//						    t = new Goto(status,C[status].next[0]);
-//						    aa--;
-//						}
-//
-//						status = go.get(t);
-//						System.out.println(status);
-//						stack.push(status);
-//						sign.push(C[status].next[0]);
-////						C[status].next[0]
-//
-//
-////						break;
-//					}
-					
 				}
 				else {
 					//移入
@@ -369,8 +351,10 @@ public class Test {
 					sign.push(valuePeek);
 					status = go.get(temp);
 					stack.push(status);
+					tok.push(tokens[i]);//将下个token放入栈
+					
 					i++;
-					peek = input[i];
+					peek = getType(tokens[i]);
 					valuePeek = value[i];
 				}
 			}
@@ -388,7 +372,8 @@ public class Test {
 					System.out.println("Action:按照第"+num+"条文法规约为"+A);
 
 					arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
-					
+					tokPop = semanticAction(num , tok);//执行该文法对应的语义动作
+					tok.push(tokPop);
 					
 					/**
 					 * A->B
@@ -411,23 +396,22 @@ public class Test {
 				}
 				else {
 					//二义
-
-					int num = back.get(temp); // 哪一条文法归约
-					String second = Grammer.getNext(num, 1);
-
-					System.out.println("Action:移入"+peek);
-					arrayAction.add("移入"+valuePeek);
-
-//					sign.push(peek);
-					sign.push(valuePeek);
-
-					status = go.get(temp);
-					stack.push(status);
-					i++;
-					peek = input[i];
-					valuePeek = value[i];
-//					System.out.println("?");
-//					break;
+					System.out.println("二义！");
+					break;
+//					int num = back.get(temp); // 哪一条文法归约
+//					String second = Grammer.getNext(num, 1);
+//
+//					System.out.println("Action:移入"+peek);
+//					arrayAction.add("移入"+valuePeek);
+//
+////					sign.push(peek);
+//					sign.push(valuePeek);
+//
+//					status = go.get(temp);
+//					stack.push(status);
+//					i++;
+//					peek = getType(tokens[i]);
+//					valuePeek = value[i];
 				}
 			}
 			
@@ -437,6 +421,56 @@ public class Test {
         FileHelper.outputToFileSLR(arrayStack, FileHelper.FILE_STATCK);
         FileHelper.outputToFileSLR(arrayAction, FileHelper.FILE_ACTION);
 
+	}
+	
+	/*对应文法执行相应的语义动作*/
+	private Token semanticAction(int num2, Stack<Token> tok) {
+		// TODO Auto-generated method stub
+		Token temp = new Token(0);
+		switch (num2) {
+		case 25:
+			
+			break;
+		case 24:
+			temp.code = tok.peek().toString().toLowerCase();
+			tok.pop();
+			break;
+		case 23:
+			temp.code = tok.peek().toString().toLowerCase();
+			tok.pop();
+			break;
+		case 22:
+			temp.code = tok.peek().code;
+			tok.pop();
+			break;
+		case 21:
+			
+			break;
+		case 20:
+			
+			break;
+		case 19:
+			break;
+		case 18:
+			break;
+		case 17:
+			Token t1 = tok.pop();
+			Token t2 = tok.pop();
+			Token t3 = tok.pop();
+			temp.code = t3.code + t2.toString().toLowerCase() + t1.code;
+			System.out.println("t = " + temp.code);
+			break;
+		case 5:
+			Token t4 = tok.pop();
+			Token t5 = tok.pop();
+			Token t6 = tok.pop();
+			temp.code = t6.code + t5.toString().toLowerCase() + t4.code;
+			System.out.println(t6.toString().toLowerCase()+ " = " + t4.code);
+			break;
+		default:
+			break;
+		}
+		return temp;
 	}
 	
 	public void printGo() {

@@ -8,6 +8,7 @@ package com.example.base;
 public class Token {
 	
 	public final int tag;//区分不同记号
+	public String code;//该token表示的代码
 	
 	public Token(int t) {
 		tag = t;
