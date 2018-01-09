@@ -50,6 +50,10 @@ public class Main extends Frame {
 //		System.out.println(getInputFromText());
 		getSLR1Input();
 		getSLR1InputValue();
+		Token[] tokens = getSLR1InputToken();
+		for (int i = 0; i < tokens.length; i++) {
+			System.out.println(tokens[i].toString());
+		}
     }
 
     public static String getInputFromText() {
@@ -166,7 +170,7 @@ public class Main extends Frame {
 		}
 		input.add(new Token('$'));
 
-		Token[] tokens = (Token[]) input.toArray();
+		Token[] tokens = (Token[]) input.toArray(new Token[input.size()]);
 		return tokens;
 	}
 

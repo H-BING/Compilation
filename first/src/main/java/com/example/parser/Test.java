@@ -283,7 +283,7 @@ public class Test {
 //		String[] input = FileHelper.getInputFromText();
 		String[] input = Main.getSLR1Input();
 		String[] value = Main.getSLR1InputValue();
-		
+
 		Token[] tokens = Main.getSLR1InputToken();
 //		for (int i = 0; i < inputSLR1.length; i++) {
 //			System.out.println(inputSLR1[i]);
