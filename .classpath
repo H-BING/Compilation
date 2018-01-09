@@ -5,6 +5,7 @@
 	<classpathentry excluding="com/example/unit/" kind="src" path="first/src/main/java"/>
 	<classpathentry kind="src" path="first/src/main/java/com/example/unit"/>
 	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="first/libs/jxl-2.6.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="first/bin"/>
 </classpath>
