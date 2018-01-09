@@ -2,6 +2,7 @@ package com.example.parser;
 
 import com.example.base.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
+import com.example.base.Token;
 import com.example.main.Main;
 import com.example.tool.ExcelHelper;
 import com.example.tool.FileHelper;
@@ -290,7 +292,9 @@ public class Test {
 		
 		int status = 0;//初始状态S0
 		stack.push(status);
+		sign.push("$");
 		String peek = input[0];
+		String valuePeek = value[0];
 //		String oldpeek = input[0];
 		
 		for(int i = 0; i < input.length;) {
@@ -359,12 +363,14 @@ public class Test {
 				else {
 					//移入
 					System.out.println("Action:移入"+peek);
-					arrayAction.add("移入"+peek);
-					sign.push(peek);
+					arrayAction.add("移入"+valuePeek);
+//					sign.push(peek);
+					sign.push(valuePeek);
 					status = go.get(temp);
 					stack.push(status);
 					i++;
 					peek = input[i];
+					valuePeek = value[i];
 				}
 			}
 			else {
@@ -487,15 +493,17 @@ public class Test {
 //
 
 					System.out.println("Action:移入"+peek);
-					arrayAction.add("移入"+peek);
+					arrayAction.add("移入"+valuePeek);
 
 
-					sign.push(peek);
+//					sign.push(peek);
+					sign.push(valuePeek);
 
 					status = go.get(temp);
 					stack.push(status);
 					i++;
 					peek = input[i];
+					valuePeek = value[i];
 //					System.out.println("?");
 //					break;
 				}
@@ -504,6 +512,8 @@ public class Test {
 		}
 
 		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
+        FileHelper.outputToFileSLR(arrayStack, FileHelper.FILE_STATCK);
+        FileHelper.outputToFileSLR(arrayAction, FileHelper.FILE_ACTION);
 
 	}
 	
@@ -634,6 +644,10 @@ public class Test {
 			System.out.println(tableGoto.get(i).getFirst().getFirst() + " "
 					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
 		}
+	}
+
+	public String getInputFromToken(Token token) {
+		return token.toString().toLowerCase();
 	}
 	
 	public static void main(String[] args) {
