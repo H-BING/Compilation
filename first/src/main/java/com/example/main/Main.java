@@ -30,26 +30,14 @@ public class Main extends Frame {
 	
 	public static Token[] tok = new Token[600000];
 	public static int[] line = new int[600000];
-	public static final int x = 200,y = 30,width = 900,height = 600;
 	public static int length = 0;
-	public static JTextArea output = new JTextArea();
-	public static JTextArea input = new JTextArea();
-	public static String FILE_INPUT = "file/test1.txt";
+	
+	
+	public static String FILE_INPUT = "first\\file\\test1.txt";
 	
 	public static String FILE_OUTPUT = "first\\file\\output.txt";
-	public Main() {
-		JPanel panel1 = new JPanel();
-		addInput(panel1);
-		JPanel panel2 = new JPanel();
-		addOutput(panel2);
-		
-		this.add(panel1);
-		this.add(panel2);
-
-	}
 
     public static void main(String[] args) throws IOException {
-//    	new Main().lanchar();
 //		getInputFromText();
 //		write();
 //		output();
@@ -75,7 +63,7 @@ public class Main extends Frame {
 					builder.append(input).append("\n");
 				}
 			} else {
-				System.out.println("�Ҳ���ָ���ļ���");
+				System.out.println("找不到指定文件！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -229,64 +217,4 @@ public class Main extends Frame {
 		}*/
 	}
 
-	private void addInput(JPanel panel1) {
-		// TODO Auto-generated method stub
-		panel1.setBounds(30, 60, 840 ,280);//220
-//		GridLayout Layout = new GridLayout(3,3);
-		panel1.setLayout(null);
-
-		input.setText(null);
-		input.setLineWrap(true);
-		input.setBounds(0, 0, 840, 280);
-		panel1.add(input);
-		input.setBackground(new Color(211,211,211));
-
-	}
-
-	private void addOutput(JPanel panel2) {
-		panel2.setBounds(30, 360, 840 ,220);
-		panel2.setLayout(null);
-
-		panel2.add(output);
-		output.setBounds(0, 0, 840, 220);
-		output.setBackground(Color.gray);
-
-	}
-
-	public void lanchar(){
-
-		this.setBounds(x, y, width, height);
-		this.setTitle("PASCAL编译�?");
-		this.setBackground(Color.white);
-		this.setResizable(false);
-		this.setLayout(null);
-
-
-		//在窗体事件源上添加带有处理事件的监听器
-		this.addWindowListener(new WindowAdapter(){
-
-			public void windowClosing(WindowEvent e){
-				System.exit(0);//关闭窗口处理关闭动作监听事件
-			}
-		});
-
-
-		/**
-		 * 添加按钮监听
-		 */
-		Button b=new Button("编译");//在窗口中添加�?个按钮；
-		b.setBounds(30, 30, 40, 20);
-		b.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				output();
-			}
-		});
-		this.add(b);//将按钮添加到窗口�?
-
-		this.setVisible(true);
-
-	}
 }

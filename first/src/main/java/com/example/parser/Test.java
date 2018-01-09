@@ -35,7 +35,7 @@ public class Test {
 		}
 
 //		print();
-//		ExcelHelper.saveClosure(go, C, num);
+		ExcelHelper.saveClosure(go, C, num);
 		
 	}
 	
@@ -280,8 +280,9 @@ public class Test {
 		Stack<String> sign = new Stack<>();
 //		String[] input = FileHelper.getInputFromText();
 		String[] input = Main.getSLR1Input();
-//		for (int i = 0; i < inputSLR1.length; i++) {
-//			System.out.println(inputSLR1[i]);
+		
+//		for (int i = 0; i < input.length; i++) {
+//			System.out.println(input[i]);
 //		}
 
 		ArrayList<String> arrayStack = new ArrayList<>();
@@ -296,7 +297,7 @@ public class Test {
 			
 			printStack(stack);
 			arrayStack.add(getSignStack(sign));
-//			System.out.println(status+" "+input[i]+" "+peek);
+
 			Goto temp = new Goto(status,peek);
 			//判断对当前输入
 			if(back.get(temp) == null) {
@@ -394,19 +395,11 @@ public class Test {
 					status = stack.pop();
 					stack.push(status);
 					
-					if(go.get(new Goto(status,A))== null) {
-//						System.out.println(status+" "+A);
-						//归结
-//						break;
-//						i++;
-//						peek = input[i];
-//						continue;
-					}
-					else {
-						status = go.get(new Goto(status,A));
-						stack.push(status);
-						sign.push(A);
-					}				
+					
+					status = go.get(new Goto(status,A));
+					stack.push(status);
+					sign.push(A);
+									
 					
 				}
 				else {
@@ -414,7 +407,6 @@ public class Test {
 
 					int num = back.get(temp); // 哪一条文法归约
 					String second = Grammer.getNext(num, 1);
-					System.out.println(" ========================= " + second + " " + peek);
 
 //					if (second.equals("+") || second.equals("-")) {
 //						if (peek.equals("+") || peek.equals("-")) {
@@ -600,7 +592,7 @@ public class Test {
 //					+tableGoto.get(i).getFirst().getSecond() + " " + tableGoto.get(i).getSecond());
 //		}
 
-		ExcelHelper.saveToExcel(tableGoto, tableBack);
+//		ExcelHelper.saveToExcel(tableGoto, tableBack);
 	}
 	
 	public void printBack() {
@@ -639,8 +631,8 @@ public class Test {
 		Grammer.init();
 		Test test = new Test();
 		test.items();
-		test.printBack();
-		test.printGo();
+//		test.printBack();
+//		test.printGo();
 		test.parser();
 
 //		test.ExportExcel();
