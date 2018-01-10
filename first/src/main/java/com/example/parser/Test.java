@@ -458,13 +458,36 @@ public class Test {
 				codes[offset++] = "if(" + tok.peek().code + ") goto " +"M2.instr";
 				codes[offset++] = "goto" +"stmt.next";
 			}else {
+				Token[] temp = new Token[5];
+				for(int i = 0; i < 5; i++) {
+					temp[i] = tok.pop();
+				}
+				if(temp[1].type.equals("downto")) {
+					codes[offset++] = "if("+temp[4].code +">="+temp[0].code+") goto "+"M2.instr";
+					codes[offset++] = "goto " + "stmt.instr";
+					codes[offset++] = "t" + tNum+"="+temp[4].code+"- 1";
+					codes[offset++] = temp[4].code+"= t"+tNum;
+					int t = offset - 4;
+					codes[offset++] = "goto " + t;
+					tNum++;
+				}else {
+					codes[offset++] = "if("+temp[4].code +"<="+temp[0].code+") goto "+"M2.instr";
+					codes[offset++] = "goto " + "stmt.instr";
+					codes[offset++] = "t" + tNum+"="+temp[4].code+"+ 1";
+					codes[offset++] = temp[4].code+"= t"+tNum;
+					int t = offset - 4;
+					codes[offset++] = "goto " + t;
+					tNum++;
+				}
+				for(int i = 0; i < 5; i++) {
+					tok.push(temp[i]);
+				}
 				
-//				codes[offset++] = "if("+tok.peek().code+ tok.peek().code+")";
 			}
 		}
 	}
 
-	/*对应文法执行相应的语义动作*/
+	/*对应文法执行规约时候相应的语义动作*/
 	private void semanticAction(int num2, int length, Stack<Token> tok) {
 		// TODO Auto-generated method stub
 		Token[] temp = new Token[length];
