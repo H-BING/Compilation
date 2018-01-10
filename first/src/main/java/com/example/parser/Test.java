@@ -25,7 +25,9 @@ public class Test {
 	Map<Goto,Integer> go = new HashMap<Goto,Integer>();
 	Map<Goto,Integer> back = new HashMap<Goto,Integer>();//规约表
 	
-	int offset = 100;//三地址代码初始地址
+	int offset = 0;//三地址代码初始地址
+	int tNum = 0;//临时变量标号
+	String[] codes = new String[20000];//存储
 	
 	/**
 	 * 构建项目集合与goto表
@@ -313,9 +315,15 @@ public class Test {
 		String[] value = Main.getSLR1InputValue();
 
 		Token[] tokens = Main.getSLR1InputToken();
-//		for (int i = 0; i < tokens.length; i++) {
-//			System.out.println(getType(tokens[i])+" "+input[i]);
-//		}
+		for (int i = 0; i < tokens.length; i++) {
+			if(tokens[i].getValue().equals(":=")) {
+				tokens[i].code = "=";
+			}else {
+				tokens[i].code = tokens[i].getValue();
+			}	
+			tokens[i].type = getType(tokens[i]);
+//			System.out.println(tokens[i].code + " " + tokens[i].type);
+		}
 
 		ArrayList<String> arrayStack = new ArrayList<>();
 		ArrayList<String> arrayAction = new ArrayList<>();
@@ -351,6 +359,8 @@ public class Test {
 					sign.push(valuePeek);
 					status = go.get(temp);
 					stack.push(status);
+					
+					gotoAction(valuePeek,tok);
 					tok.push(tokens[i]);//将下个token放入栈
 					
 					i++;
@@ -372,14 +382,14 @@ public class Test {
 					System.out.println("Action:按照第"+num+"条文法规约为"+A);
 
 					arrayAction.add("按照 "+Grammer.nonTerminal[Grammer.getLeft(num)] + " 👉 " + Grammer.getPro(num) +" 规约");
-					tokPop = semanticAction(num , tok);//执行该文法对应的语义动作
-					tok.push(tokPop);
-					
+
 					/**
 					 * A->B
 					 * 从栈中弹出B的个数个符号
 					 */
 					String[] nums = Grammer.getPro(num).split(" ");
+					semanticAction(num ,nums.length, tok);//执行该文法对应的语义动作
+					tok.peek().type = A;
 					for(int k = 0; k < nums.length; k++) {
 						stack.pop();
 						sign.pop();
@@ -416,6 +426,10 @@ public class Test {
 			}
 			
 		}
+		
+		for(int i = 0;i<offset;i++) {
+			System.out.println(i+":"+ codes[i]);
+		}
 
 		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
         FileHelper.outputToFileSLR(arrayStack, FileHelper.FILE_STATCK);
@@ -423,54 +437,79 @@ public class Test {
 
 	}
 	
-	/*对应文法执行相应的语义动作*/
-	private Token semanticAction(int num2, Stack<Token> tok) {
+	private void gotoAction(String valuePeek, Stack<Token> tok) {
 		// TODO Auto-generated method stub
-		Token temp = new Token(0);
-		switch (num2) {
-		case 25:
-			
-			break;
-		case 24:
-			temp.code = tok.peek().toString().toLowerCase();
-			tok.pop();
-			break;
-		case 23:
-			temp.code = tok.peek().toString().toLowerCase();
-			tok.pop();
-			break;
-		case 22:
-			temp.code = tok.peek().code;
-			tok.pop();
-			break;
-		case 21:
-			
-			break;
-		case 20:
-			
-			break;
-		case 19:
-			break;
-		case 18:
-			break;
-		case 17:
-			Token t1 = tok.pop();
-			Token t2 = tok.pop();
-			Token t3 = tok.pop();
-			temp.code = t3.code + t2.toString().toLowerCase() + t1.code;
-			System.out.println("t = " + temp.code);
-			break;
-		case 5:
-			Token t4 = tok.pop();
-			Token t5 = tok.pop();
-			Token t6 = tok.pop();
-			temp.code = t6.code + t5.toString().toLowerCase() + t4.code;
-			System.out.println(t6.toString().toLowerCase()+ " = " + t4.code);
-			break;
-		default:
-			break;
+		if(valuePeek.equals("downto") || valuePeek.equals("to")) {
+			Token[] temp = new Token[3];
+			temp[0] = tok.pop();
+			temp[1] = tok.pop();
+			temp[2] = tok.pop();
+			codes[offset++] = temp[2].code + temp[1].code + temp[0].code;
+			tok.push(temp[2]);
+			tok.push(temp[1]);
+			tok.push(temp[0]);
+		}else if(valuePeek.equals("then")) {
+			codes[offset++] = "if(" + tok.peek().code + ") goto " +"M1.instr";
+			codes[offset++] = "goto" +"stmt.next";
+		}else if(valuePeek.equals("else")) {
+			codes[offset++] = "goto " +"stmt.next";
+		}else if(valuePeek.equals("do")) {
+			if(tok.peek().type.equals("bool")) {
+				codes[offset++] = "if(" + tok.peek().code + ") goto " +"M2.instr";
+				codes[offset++] = "goto" +"stmt.next";
+			}else {
+				
+//				codes[offset++] = "if("+tok.peek().code+ tok.peek().code+")";
+			}
 		}
-		return temp;
+	}
+
+	/*对应文法执行相应的语义动作*/
+	private void semanticAction(int num2, int length, Stack<Token> tok) {
+		// TODO Auto-generated method stub
+		Token[] temp = new Token[length];
+		for(int i = 0; i < length - 1; i++) {
+			temp[i] = tok.pop();
+		}
+		for(int i = length - 2; i >= 0; i--) {
+			tok.peek().code = tok.peek().code + temp[i].code;
+		}
+		
+		if(num2 == 25) {
+//			tok.peek().code = "("+tok.peek()+")";
+		}else if (num2 == 24 || num2 == 23) {
+//			tok.peek().code = tok.peek().getValue();
+		}else if(num2 >= 17 && num2 <= 21) {
+//			Token t1 = tok.pop();
+//			Token t2 = tok.pop();
+//			
+//			tok.peek().code = tok.peek().code + t2.getValue() + t1.code;
+			codes[offset++] = "t"+tNum+"=" + tok.peek().code;
+//			System.out.println("t"+tNum+" = " + tok.peek().code);
+			tok.peek().code = "t" + tNum;
+			tNum++;
+		}else if(num2 == 16 || num2 == 15 ) {
+//			Token t1 = tok.pop();
+//			Token t2 = tok.pop();
+//			tok.peek().code = tok.peek().code + t2.getValue() + t1.code;
+		}else if (num2 == 14) {
+			codes[offset++] = "goto " + "M3.instr";
+		}else if (num2 == 13) {
+			codes[offset++] = "goto " + "M3.instr";
+		}else if (num2 == 12) {
+			
+		}else if (num2 == 11) {
+			
+		}else if (num2 == 9) {
+			codes[offset++] = "goto " + "M1.instr";
+		}else if (num2 == 5) {
+//			Token t3 = tok.pop();
+//			Token t4 = tok.pop();
+//			
+//			tok.peek().code = tok.peek().getValue() + "=" + t3.code;
+			codes[offset++] = tok.peek().code;
+//			System.out.println(tok.peek().code);
+		}
 	}
 	
 	public void printGo() {
