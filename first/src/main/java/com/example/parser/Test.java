@@ -581,8 +581,8 @@ public class Test {
 //				tok.peek().nextlist.add(offset);//s2.nextlist
 //				codes[offset++] = "goto ";
 //			}
-			tok.peek().nextlist.addAll(temp[0].nextlist);
-			tok.peek().nextlist.addAll(temp[2].nextlist);
+//			tok.peek().nextlist.addAll(temp[0].nextlist);
+			tok.peek().nextlist.addAll(temp[2].nextlist);//s1.nextlist
 			
 		}else if (num2 == 11) {//if_stmt -> if bool then stmt
 			//s.nextlist = merge(L1.falselist,s1.nextlist)
@@ -590,7 +590,7 @@ public class Test {
 //				tok.peek().nextlist.add(offset);
 //				codes[offset++] = "goto ";
 //			}
-			tok.peek().nextlist.addAll(temp[0].nextlist);//s1.nextlist
+//			tok.peek().nextlist.addAll(temp[0].nextlist);//s1.nextlist
 			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
 		}else if (num2 == 9) {
 			//batchpath(s1.nextlist,L1.instr)
