@@ -16,6 +16,7 @@ public class Token {
 	public ArrayList<Integer> nextlist = new ArrayList<Integer>();//出口列表
 	public int next = 0;//出口
 	public int instr = 0;//三地址编码
+	public int num;//按照哪一条文法规约
 	
 	public Token(int t) {
 		tag = t;

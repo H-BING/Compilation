@@ -395,6 +395,7 @@ public class Test {
 					String[] nums = Grammer.getPro(num).split(" ");
 					semanticAction(num ,nums.length, tok);//执行该文法对应的语义动作
 					tok.peek().type = A;
+					tok.peek().num = num;
 					for(int k = 0; k < nums.length; k++) {
 						stack.pop();
 						sign.pop();
@@ -537,12 +538,11 @@ public class Test {
 			tok.peek().code = "t" + tNum;
 			tNum++;
 		}else if(num2 == 16 || num2 == 15 ) {
-//			Token t1 = tok.pop();
-//			Token t2 = tok.pop();
-//			tok.peek().code = tok.peek().code + t2.getValue() + t1.code;
+			
 		}else if (num2 == 14) {
 			//backpath(s1.nextlist,L2.instr)
-			if(temp[0].nextlist.size() == 0) {
+			System.out.println(temp[0].type+" "+temp[0].value);
+			if(temp[0].num == 5 || temp[0].num == 6 || temp[0].num == 7) {
 				temp[0].nextlist.add(offset);//s1.nextlist
 			    codes[offset++] = "goto ";
 			}
@@ -551,12 +551,12 @@ public class Test {
 				int result = (int) temp[0].nextlist.get(i);
 				codes[result] = codes[result] + t1;
 		    }
-			//s.next = merge(L1.falselist);
-			tok.peek().nextlist.addAll(temp[2].nextlist);
+			//s.next = L1.falselist;
+			tok.peek().nextlist = temp[2].nextlist;
 			
 		}else if (num2 == 13) {
 			//backpath(s1.nextlist,L2.instr)
-			if(temp[0].nextlist.size() == 0) {
+			if(temp[0].num == 5 || temp[0].num == 6 || temp[0].num == 7) {
 				temp[0].nextlist.add(offset);//s1.nextlist
 			    codes[offset++] = "goto ";
 			}
@@ -565,8 +565,8 @@ public class Test {
 				int result = (int) temp[0].nextlist.get(i);
 				codes[result] = codes[result] + t1;
 		    }
-			//s.next = merge(L1.falselist);
-			tok.peek().nextlist.addAll(temp[2].nextlist);
+			//s.next = L1.falselist;
+			tok.peek().nextlist = temp[2].nextlist;
 		}else if (num2 == 12) {
 			//backpath(L1.falseList,s2.instr)
 			ArrayList<Integer> tem = temp[4].nextlist;//L1.falseList
@@ -577,23 +577,25 @@ public class Test {
 		    }
 			
 			//s.nextlist = merge(s1.nextlist,s2.nextlist)
-			if(temp[0].nextlist.size() == 0) {
-				tok.peek().nextlist.add(offset);//s2.nextlist
-				codes[offset++] = "goto ";
-			}
+//			if(temp[0].nextlist.size() == 0) {
+//				tok.peek().nextlist.add(offset);//s2.nextlist
+//				codes[offset++] = "goto ";
+//			}
+			tok.peek().nextlist.addAll(temp[0].nextlist);
 			tok.peek().nextlist.addAll(temp[2].nextlist);
 			
 		}else if (num2 == 11) {//if_stmt -> if bool then stmt
 			//s.nextlist = merge(L1.falselist,s1.nextlist)
-			if(temp[0].nextlist.size() == 0) {
-				tok.peek().nextlist.add(offset);//s1.nextlist
-				codes[offset++] = "goto ";
-			}
+//			if(temp[0].nextlist.size() == 0) {
+//				tok.peek().nextlist.add(offset);
+//				codes[offset++] = "goto ";
+//			}
+			tok.peek().nextlist.addAll(temp[0].nextlist);//s1.nextlist
 			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
 		}else if (num2 == 9) {
 			//batchpath(s1.nextlist,L1.instr)
 			int t1 = temp[2].instr;
-			if(temp[0].nextlist.size() == 0) {
+			if(temp[0].num == 5 || temp[0].num == 6 || temp[0].num == 7) {
 				temp[0].nextlist.add(offset);//s1.nextlist
 				codes[offset++] = "goto ";
 			}
@@ -602,7 +604,7 @@ public class Test {
 				codes[result] = codes[result] + t1;
 		    }
 			//s.nextlist = L1.falselist
-			tok.peek().nextlist.addAll(temp[2].nextlist);
+			tok.peek().nextlist = temp[2].nextlist;
 		}else if (num2 == 5) {//stmt->id:=expr
 			codes[offset++] = tok.peek().code;
 		}
@@ -619,6 +621,7 @@ public class Test {
 					int result = (int) tok.peek().nextlist.get(i);
 					codes[result] = codes[result] + offset;
 			    }
+//				tok.peek().nextlist = new ArrayList<Integer>();
 			}
 		}
 	}
