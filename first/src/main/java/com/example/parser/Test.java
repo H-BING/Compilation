@@ -494,8 +494,8 @@ public class Test {
 					codes[offset++] = "if("+temp[4].code +">="+temp[0].code+") goto " + t1;
 					tok.peek().nextlist.add(offset);//L1.falselist
 					codes[offset++] = "goto ";
-					codes[offset++] = "t" + tNum+"="+temp[4].code+"- 1";
-					codes[offset++] = temp[4].code+"= t"+tNum;
+					codes[offset++] = "t" + tNum+"="+temp[4].code+"-1";
+					codes[offset++] = temp[4].code+"=t"+tNum;
 					int t2 = offset - 4;
 					codes[offset++] = "goto " + t2;
 					tNum++;
