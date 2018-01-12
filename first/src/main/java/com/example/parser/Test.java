@@ -364,6 +364,9 @@ public class Test {
 					
 					gotoAction(valuePeek,tok);
 					tok.push(tokens[i]);//将下个token放入栈
+					if(valuePeek.equals("while")) {
+						tok.peek().instr = offset;
+					}
 					
 					i++;
 					peek = getType(tokens[i]);
@@ -429,9 +432,10 @@ public class Test {
 			
 		}
 		
-		for(int i = offinit;i<offset;i++) {
+		for(int i = offinit;i < offset;i++) {
 			System.out.println(i+":"+ codes[i]);
 		}
+		System.out.println(offset+":");
 
 		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
         FileHelper.outputToFileSLR(arrayStack, FileHelper.FILE_STATCK);
@@ -465,8 +469,17 @@ public class Test {
 			tok.peek().instr = offset;//s2.instr
 		}else if(valuePeek.equals("do")) {
 			if(tok.peek().type.equals("bool")) {
-				codes[offset++] = "if(" + tok.peek().code + ") goto " + "L1.true";
-				codes[offset++] = "goto " +"L1.false";
+				Token[] temp = new Token[3];
+				temp[0] = tok.pop();
+				temp[1] = tok.pop();
+				tok.push(temp[1]);
+				tok.push(temp[0]);
+				
+				tok.peek().instr = temp[1].instr;//L1.instr
+				int t1 = offset + 2;
+				codes[offset++] = "if(" + tok.peek().code + ") goto " + t1;
+				tok.peek().nextlist.add(offset);//L1.falselist
+				codes[offset++] = "goto ";
 			}else {
 				Token[] temp = new Token[5];
 				for(int i = 0; i < 5; i++) {
@@ -519,10 +532,6 @@ public class Test {
 		}else if (num2 == 24 || num2 == 23) {
 //			tok.peek().code = tok.peek().getValue();
 		}else if(num2 >= 17 && num2 <= 21) {
-//			Token t1 = tok.pop();
-//			Token t2 = tok.pop();
-//			
-//			tok.peek().code = tok.peek().code + t2.getValue() + t1.code;
 			codes[offset++] = "t"+tNum+"=" + tok.peek().code;
 //			System.out.println("t"+tNum+" = " + tok.peek().code);
 			tok.peek().code = "t" + tNum;
@@ -573,9 +582,8 @@ public class Test {
 				codes[offset++] = "goto ";
 			}
 			tok.peek().nextlist.addAll(temp[2].nextlist);
-			//s1的goto s.next所在三地址码：s2.instr-1 s2:offset
 			
-		}else if (num2 == 11) {
+		}else if (num2 == 11) {//if_stmt -> if bool then stmt
 			//s.nextlist = merge(L1.falselist,s1.nextlist)
 			if(temp[0].nextlist.size() == 0) {
 				tok.peek().nextlist.add(offset);//s1.nextlist
@@ -583,20 +591,35 @@ public class Test {
 			}
 			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
 		}else if (num2 == 9) {
-			codes[offset++] = "goto " + "M1.instr";
-		}else if (num2 == 5) {
-//			Token t3 = tok.pop();
-//			Token t4 = tok.pop();
-//			
-//			tok.peek().code = tok.peek().getValue() + "=" + t3.code;
+			//batchpath(s1.nextlist,L1.instr)
+			int t1 = temp[2].instr;
+			if(temp[0].nextlist.size() == 0) {
+				temp[0].nextlist.add(offset);//s1.nextlist
+				codes[offset++] = "goto ";
+			}
+			for (int i = 0; i < temp[0].nextlist.size(); i++) {
+				int result = (int) temp[0].nextlist.get(i);
+				codes[result] = codes[result] + t1;
+		    }
+			//s.nextlist = L1.falselist
+			tok.peek().nextlist.addAll(temp[2].nextlist);
+		}else if (num2 == 5) {//stmt->id:=expr
 			codes[offset++] = tok.peek().code;
-//			System.out.println(tok.peek().code);
 		}
 		else {
 			if(length > 1) {
 				tok.peek().nextlist = temp[0].nextlist;
 			}
-			
+			if(num2 == 2) {
+				tok.peek().nextlist = temp[1].nextlist;
+			}
+			if(num2 == 3 || num2 == 4) {//stmts->stmt stmts->stmts;stmt
+				//backpath(s.nextlist,offset)
+				for (int i = 0; i < tok.peek().nextlist.size(); i++) {
+					int result = (int) tok.peek().nextlist.get(i);
+					codes[result] = codes[result] + offset;
+			    }
+			}
 		}
 	}
 	
