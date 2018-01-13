@@ -393,18 +393,24 @@ public class Test {
 					 * 从栈中弹出B的个数个符号
 					 */
 					String[] nums = Grammer.getPro(num).split(" ");
-					semanticAction(num ,nums.length, tok);//执行该文法对应的语义动作
+					int length = nums.length;
+					if(Grammer.getPro(num).equals("")) {
+						length--;
+//						System.out.println("!!");
+					}
+					semanticAction(num ,length, tok);//执行该文法对应的语义动作
 					tok.peek().type = A;
 					tok.peek().num = num;
-					for(int k = 0; k < nums.length; k++) {
+					for(int k = 0; k < length; k++) {
 						stack.pop();
 						sign.pop();
 					}
 					status = stack.pop();
 					stack.push(status);
-					
-					
+//					System.out.println(nums[0]);
+//					System.out.println(A);
 					status = go.get(new Goto(status,A));
+					
 					stack.push(status);
 					sign.push(A);
 									
@@ -521,6 +527,7 @@ public class Test {
 	private void semanticAction(int num2, int length, Stack<Token> tok) {
 		// TODO Auto-generated method stub
 		Token[] temp = new Token[length];
+//		System.out.println(length+" "+tok.size());
 		for(int i = 0; i < length - 1; i++) {
 			temp[i] = tok.pop();
 		}
@@ -592,6 +599,9 @@ public class Test {
 //			}
 //			tok.peek().nextlist.addAll(temp[0].nextlist);//s1.nextlist
 			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
+		}else if(num2 == 10){
+			Token item = new Token(0);
+			tok.push(item);
 		}else if (num2 == 9) {
 			//batchpath(s1.nextlist,L1.instr)
 			int t1 = temp[2].instr;
