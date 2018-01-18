@@ -68,6 +68,25 @@ public class FileHelper {
         return builder.toString().split(" ");
     }
 
+    public static void outputToText(String[] list, int start, int length) {
+        try {
+            File file = new File(FILE_OUTPUT);
+            OutputStream outputStream = new FileOutputStream(file);
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = start; i < length; i++) {
+                builder.append(i).append(":").append(list[i]).append("\r\n");
+            }
+            builder.append(length).append(":").append("\r\n");
+
+            byte[] data = builder.toString().getBytes();
+            outputStream.write(data);
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void outputToFileSLR(ArrayList<String> list, String filePath)  {
         try {
             File file = new File(filePath);

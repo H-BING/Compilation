@@ -364,7 +364,7 @@ public class Test {
 					
 					gotoAction(valuePeek,tok);
 					tok.push(tokens[i]);//将下个token放入栈
-					if(valuePeek.equals("while")) {
+					if(valuePeek.equals("while") || valuePeek.equals("downto") || valuePeek.equals("to")) {
 						tok.peek().instr = offset;
 					}
 					
@@ -443,6 +443,7 @@ public class Test {
 			System.out.println(i+":"+ codes[i]);
 		}
 		System.out.println(offset+":");
+		FileHelper.outputToText(codes, offinit, offset);
 
 		ExcelHelper.saveAnalysis(arrayStack, arrayAction);
         FileHelper.outputToFileSLR(arrayStack, FileHelper.FILE_STATCK);
@@ -488,15 +489,15 @@ public class Test {
 				tok.peek().nextlist.add(offset);//L1.falselist
 				codes[offset++] = "goto ";
 			}else {
-				Token[] temp = new Token[5];
-				for(int i = 0; i < 5; i++) {
+				Token[] temp = new Token[6];
+				for(int i = 0; i < 6; i++) {
 					temp[i] = tok.pop();
 				}
-				for(int i = 0; i < 5; i++) {
+				for(int i = 0; i < 6; i++) {
 					tok.push(temp[i]);
 				}
 				if(temp[1].type.equals("downto")) {
-					tok.peek().instr = offset;
+					tok.peek().instr = temp[1].instr;//L1.instr
 					int t1 = offset + 5;
 					codes[offset++] = "if("+temp[4].code +">="+temp[0].code+") goto " + t1;
 					tok.peek().nextlist.add(offset);//L1.falselist
@@ -504,10 +505,10 @@ public class Test {
 					codes[offset++] = "t" + tNum+"="+temp[4].code+"-1";
 					codes[offset++] = temp[4].code+"=t"+tNum;
 					int t2 = offset - 4;
-					codes[offset++] = "goto " + t2;
+					codes[offset++] = "goto " + temp[1].instr;
 					tNum++;
 				}else {
-					tok.peek().instr = offset;
+					tok.peek().instr = temp[1].instr;//L1.instr
 					int t1 = offset + 5;
 					codes[offset++] = "if("+temp[4].code +"<="+temp[0].code+") goto " + t1;
 					tok.peek().nextlist.add(offset);//L1.falselist
@@ -515,7 +516,7 @@ public class Test {
 					codes[offset++] = "t" + tNum+"="+temp[4].code+"+ 1";
 					codes[offset++] = temp[4].code+"= t"+tNum;
 					int t2 = offset - 4;
-					codes[offset++] = "goto " + t2;
+					codes[offset++] = "goto " + temp[1].instr;
 					tNum++;
 				}
 				
@@ -560,6 +561,10 @@ public class Test {
 		    }
 			//s.next = L1.falselist;
 			tok.peek().nextlist = temp[2].nextlist;
+
+			for (int i = 0; i < tok.peek().nextlist.size(); i++) {
+				System.out.println("============*****" + tok.peek().nextlist.get(i));
+			}
 			
 		}else if (num2 == 13) {
 			//backpath(s1.nextlist,L2.instr)
@@ -589,8 +594,8 @@ public class Test {
 //				codes[offset++] = "goto ";
 //			}
 //			tok.peek().nextlist.addAll(temp[0].nextlist);
-			tok.peek().nextlist.addAll(temp[2].nextlist);//s1.nextlist
-			
+//			tok.peek().nextlist.addAll(temp[2].nextlist);//s1.nextlist
+			tok.peek().nextlist = temp[2].nextlist;
 		}else if (num2 == 11) {//if_stmt -> if bool then stmt
 			//s.nextlist = merge(L1.falselist,s1.nextlist)
 //			if(temp[0].nextlist.size() == 0) {
@@ -598,7 +603,11 @@ public class Test {
 //				codes[offset++] = "goto ";
 //			}
 //			tok.peek().nextlist.addAll(temp[0].nextlist);//s1.nextlist
-			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
+//			tok.peek().nextlist.addAll(temp[2].nextlist);//L1.falselist
+//			for (int i = 0; i < tok.peek().nextlist.size(); i++) {
+//				System.out.println("============" + tok.peek().nextlist.get(i));
+//			}
+			tok.peek().nextlist = temp[2].nextlist;
 		}else if(num2 == 10){
 			Token item = new Token(0);
 			tok.push(item);
@@ -631,7 +640,7 @@ public class Test {
 					int result = (int) tok.peek().nextlist.get(i);
 					codes[result] = codes[result] + offset;
 			    }
-//				tok.peek().nextlist = new ArrayList<Integer>();
+				tok.peek().nextlist = new ArrayList<Integer>();
 			}
 		}
 	}
